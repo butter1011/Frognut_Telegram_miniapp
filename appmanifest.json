@@ -1,0 +1,21 @@
+{
+	"name": "Bitcoin Millionaire",
+	"short_name": "Bitcoin Millionaire",
+	"description": "",
+	"start_url": "index.html",
+	"display": "fullscreen",
+	"orientation": "portrait",
+	"background_color": "#ffffff",
+	"icons": [
+		{
+			"src": "icons/icon-16.png",
+			"sizes": "80x80",
+			"type": "image/png"
+		},
+		{
+			"src": "icons/icon-512.png",
+			"sizes": "514x514",
+			"type": "image/png"
+		}
+	]
+}
