@@ -6019,6 +6019,8 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Cnds.OnLayoutStart,
 		C3.Behaviors.Pin.Acts.PinByProperties,
 		C3.Plugins.Sprite.Cnds.OnAnimFinished,
+		C3.Plugins.System.Exps.int,
+		C3.Plugins.Browser.Exps.QueryParam,
 		C3.Plugins.Json.Acts.Parse,
 		C3.Plugins.AJAX.Exps.LastData,
 		C3.Plugins.Json.Exps.Get,
@@ -6570,7 +6572,11 @@ self.C3_ExpressionFuncs = [
 		() => "Default",
 		() => "Endgame",
 		() => "LoadGame",
-		() => 7069393465,
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const f1 = p._GetNode(1).GetBoundMethod();
+			return () => f0(f1("user_id"));
+		},
 		() => "FetchUserData",
 		() => "https://telegrambotgame-backend.vercel.app/api/v1/user",
 		p => {
