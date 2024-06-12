@@ -3,22 +3,14 @@
 
 const scriptsInEvents = {
 
-	async Menucode_Event2_Act28(runtime, localVars)
+	async Gamecode_Event60_Act3(runtime, localVars)
 	{
-		// Get UserID
-		const param = new URLSearchParams(window.location.search);
-		console.log("Working")
-		runtime.globalVars.User_ID = 989868;
-		
-		if(param.has('user_id'))
-		{
-			console.log("param exists");
-			paramGotten = param.get('user_id');
-			console.log(paramGotten);
-			runtime.globalVars.User_ID = paramGotten;
-		}
-		
-		fetch("")
+		console.log("Saved");
+	},
+
+	async Gamecode_Event62_Act3(runtime, localVars)
+	{
+		console.log("Saved");
 	}
 
 };
