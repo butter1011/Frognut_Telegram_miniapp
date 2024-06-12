@@ -6572,7 +6572,7 @@ self.C3_ExpressionFuncs = [
 		() => "LoadGame",
 		() => 7069393465,
 		() => "FetchUserData",
-		() => "http://localhost:3000/api/v1/user",
+		() => "https://telegrambotgame-backend.vercel.app/api/v1/user",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => and("user_id=", v0.GetValue());
