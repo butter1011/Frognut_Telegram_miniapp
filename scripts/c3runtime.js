@@ -6524,7 +6524,7 @@ self.C3_ExpressionFuncs = [
 		() => "B5bitcoinBoostPS",
 		() => "Tutorial",
 		() => "SaveData",
-		() => "http://localhost:3000/api/v1/update",
+		() => "https://telegrambotgame-backend.vercel.app/api/v1/update",
 		p => {
 			const n0 = p._GetNode(0);
 			return () => ("data=" + n0.ExpObject());
