@@ -6535,7 +6535,6 @@ self.C3_ExpressionFuncs = [
 			return () => (v0.GetValue() * 0.5);
 		},
 		() => "Save Game",
-		() => 15,
 		() => "BStop",
 		() => 50,
 		() => "Sound",
@@ -6548,6 +6547,7 @@ self.C3_ExpressionFuncs = [
 		() => 0.035,
 		() => 0.03,
 		() => 399,
+		() => 15,
 		() => 385,
 		() => "c1",
 		() => "c2",
