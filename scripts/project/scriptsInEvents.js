@@ -3,14 +3,14 @@
 
 const scriptsInEvents = {
 
-	async Gamecode_Event60_Act3(runtime, localVars)
+	async Gamecode_Event60_Act31(runtime, localVars)
 	{
-		console.log("Saved");
+		runtime.callFunction("SaveData");
 	},
 
-	async Gamecode_Event62_Act3(runtime, localVars)
+	async Gamecode_Event61_Act31(runtime, localVars)
 	{
-		console.log("Saved");
+		runtime.callFunction("SaveData");
 	}
 
 };
