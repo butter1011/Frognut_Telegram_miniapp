@@ -5903,113 +5903,6 @@ d},Unpin(){this._SetPinInst(null);this._mode="";this._propSet.clear();this._pinI
 }
 
 {
-'use strict';{const C3=self.C3;const C3X=self.C3X;let tempVec2a=null;let tempVec2b=null;let vec2RecycleCache=[];let Box2D=null;let physicsBehavior=null;const PHYSICS_COLLISIONS_KEY="Physics_DisabledCollisions";function SetObjectTypeCollisionsEnabled(typeA,typeB,state){const savedA=typeA.GetSavedDataMap();const savedB=typeB.GetSavedDataMap();if(state){const setA=savedA.get(PHYSICS_COLLISIONS_KEY);if(setA)setA.delete(typeB.GetSID());const setB=savedB.get(PHYSICS_COLLISIONS_KEY);if(setB)setB.delete(typeA.GetSID())}else{let setA=
-savedA.get(PHYSICS_COLLISIONS_KEY);if(!setA){setA=new Set;savedA.set(PHYSICS_COLLISIONS_KEY,setA)}let setB=savedB.get(PHYSICS_COLLISIONS_KEY);if(!setB){setB=new Set;savedB.set(PHYSICS_COLLISIONS_KEY,setB)}setA.add(typeB.GetSID());setB.add(typeA.GetSID())}}C3.Behaviors.Physics=class PhysicsBehavior extends C3.SDKBehaviorBase{constructor(opts){opts.scriptInterfaceClass=self.IPhysicsBehavior;super(opts);this._world=null;this._worldG=10;this._worldScale=.02;this._worldManifold=null;this._lastUpdateTick=
--1;this._steppingMode=1;this._velocityIterations=8;this._positionIterations=3;this._allCollisionsEnabled=true;this._runtime.AddLoadPromise(this._LoadBox2DWasm())}async _LoadBox2DWasm(){const box2dWasmUrl=await this._runtime.GetAssetManager().GetProjectFileUrl("box2d.wasm");await new Promise(resolve=>{self["Box2DWasmModule"]({"wasmBinaryFile":box2dWasmUrl}).then(box2d=>{Box2D=box2d;this._InitBox2DWorld();resolve()})})}_InitBox2DWorld(){const collisionEngine=this._runtime.GetCollisionEngine();tempVec2a=
-C3.Behaviors.Physics.GetVec2(0,0);tempVec2b=C3.Behaviors.Physics.GetVec2(0,0);this._world=new Box2D["b2World"](C3.Behaviors.Physics.GetTempVec2A(0,this._worldG),true);const listener=new Box2D["JSContactListener"];listener["BeginContact"]=contactPtr=>{const contact=Box2D["wrapPointer"](contactPtr,Box2D["b2Contact"]);const behA=C3.Behaviors.Physics.Instance.LookupBehInstFromBody(contact["GetFixtureA"]()["GetBody"]());const behB=C3.Behaviors.Physics.Instance.LookupBehInstFromBody(contact["GetFixtureB"]()["GetBody"]());
-collisionEngine.RegisterCollision(behA.GetObjectInstance(),behB.GetObjectInstance())};listener["EndContact"]=()=>{};listener["PreSolve"]=()=>{};listener["PostSolve"]=()=>{};this._world["SetContactListener"](listener);const filter=new Box2D["JSContactFilter"];filter["ShouldCollide"]=(fixAPtr,fixBPtr)=>{if(this._allCollisionsEnabled)return true;const fixtureA=Box2D["wrapPointer"](fixAPtr,Box2D["b2Fixture"]);const fixtureB=Box2D["wrapPointer"](fixBPtr,Box2D["b2Fixture"]);const behA=C3.Behaviors.Physics.Instance.LookupBehInstFromBody(fixtureA["GetBody"]());
-const behB=C3.Behaviors.Physics.Instance.LookupBehInstFromBody(fixtureB["GetBody"]());const typeA=behA.GetObjectInstance().GetObjectClass();const typeB=behB.GetObjectInstance().GetObjectClass();const sidA=typeA.GetSID();const sidB=typeB.GetSID();const setA=typeA.GetSavedDataMap().get(PHYSICS_COLLISIONS_KEY);if(setA&&setA.has(sidB))return false;const setB=typeB.GetSavedDataMap().get(PHYSICS_COLLISIONS_KEY);if(setB&&setB.has(sidA))return false;return true};this._world["SetContactFilter"](filter);this._worldManifold=
-new Box2D["b2WorldManifold"]}Release(){super.Release()}GetBox2D(){return Box2D}GetWorld(){return this._world}GetWorldScale(){return this._worldScale}GetSteppingMode(){return this._steppingMode}SetSteppingMode(m){this._steppingMode=m}SetLastUpdateTick(t){this._lastUpdateTick=t}GetLastUpdateTick(){return this._lastUpdateTick}SetVelocityIterations(v){this._velocityIterations=Math.max(v,1)}GetVelocityIterations(){return this._velocityIterations}SetPositionIterations(p){this._positionIterations=Math.max(p,
-1)}GetPositionIterations(){return this._positionIterations}SetIterations(v,p){this.SetVelocityIterations(v);this.SetPositionIterations(p)}GetGravity(){return this._worldG}SetGravity(g){if(g===this._worldG)return;this._world["SetGravity"](C3.Behaviors.Physics.GetTempVec2A(0,g));this._worldG=g;this._WakeUpAllPhysicsBodies()}_WakeUpAllPhysicsBodies(){for(const inst of this.GetInstances()){const behInst=C3.Behaviors.Physics.Instance.LookupBehInstFromInst(inst);if(!behInst)continue;const body=behInst.GetBody();
-if(!body)continue;body["SetAwake"](true)}}DisableShouldCollideFastPath(){this._allCollisionsEnabled=false}SetCollisionsEnabled(typeA,typeB,state){state=!!state;if(!typeA||!typeB)return;if(typeB.IsFamily())for(const member of typeB.GetFamilyMembers())SetObjectTypeCollisionsEnabled(typeA,member,state);else SetObjectTypeCollisionsEnabled(typeA,typeB,state);this.DisableShouldCollideFastPath()}GetWorldManifold(){return this._worldManifold}static GetPhysicsCollisionKey(){return PHYSICS_COLLISIONS_KEY}static GetVec2(x,
-y){if(vec2RecycleCache.length){const ret=vec2RecycleCache.pop();ret["set_x"](x);ret["set_y"](y);return ret}else{const b2Vec2=Box2D["b2Vec2"];return new b2Vec2(x,y)}}static FreeVec2(v){vec2RecycleCache.push(v)}static GetTempVec2A(x,y){tempVec2a["set_x"](x);tempVec2a["set_y"](y);return tempVec2a}static GetTempVec2B(x,y){tempVec2b["set_x"](x);tempVec2b["set_y"](y);return tempVec2b}static CreatePolygonShape(vertices){const b2PolygonShape=Box2D["b2PolygonShape"];const shape=new b2PolygonShape;const buffer=
-Box2D["_malloc"](vertices.length*8);let offset=0;for(let i=0;i<vertices.length;++i){Box2D["HEAPF32"][buffer+offset>>2]=vertices[i]["get_x"]();Box2D["HEAPF32"][buffer+(offset+4)>>2]=vertices[i]["get_y"]();offset+=8}const ptr_wrapped=Box2D["wrapPointer"](buffer,Box2D["b2Vec2"]);shape["Set"](ptr_wrapped,vertices.length);Box2D["_free"](buffer);return shape}};const STEPPING_MODES=["fixed","variable"];self.IPhysicsBehavior=class IPhysicsBehavior extends self.IBehavior{constructor(behavior){super(behavior);
-physicsBehavior=behavior}set worldGravity(g){C3X.RequireFiniteNumber(g);physicsBehavior.SetGravity(g)}get worldGravity(){return physicsBehavior.GetGravity()}set steppingMode(s){const i=STEPPING_MODES.indexOf(s);if(i<0)throw new Error("invalid stepping mode");physicsBehavior.SetSteppingMode(STEPPING_MODES[i])}get steppingMode(){return STEPPING_MODES[physicsBehavior.GetSteppingMode()]}set velocityIterations(v){C3X.RequireFiniteNumber(v);physicsBehavior.SetVelocityIterations(v)}get velocityIterations(){return physicsBehavior.GetVelocityIterations()}set positionIterations(p){C3X.RequireFiniteNumber(p);
-physicsBehavior.SetPositionIterations(p)}get positionIterations(){return physicsBehavior.GetPositionIterations()}setCollisionsEnabled(iObjectClassA,iObjectClassB,state){const runtime=physicsBehavior.GetRuntime();const objectClassA=runtime._UnwrapIObjectClass(iObjectClassA);const objectClassB=runtime._UnwrapIObjectClass(iObjectClassB);state=!!state;physicsBehavior.SetCollisionsEnabled(objectClassA,objectClassB,state)}}}{const C3=self.C3;C3.Behaviors.Physics.Type=class PhysicsType extends C3.SDKBehaviorTypeBase{constructor(behaviorType){super(behaviorType)}Release(){super.Release()}OnCreate(){}}}
-{const C3=self.C3;const C3X=self.C3X;const IBehaviorInstance=self.IBehaviorInstance;const assert=self.assert;const IMMOVABLE=0;const COLLISION_MASK=1;const PREVENT_ROTATION=2;const DENSITY=3;const FRICTION=4;const ELASTICITY=5;const LINEAR_DAMPING=6;const ANGULAR_DAMPING=7;const BULLET=8;const ENABLE=9;const body2beh=new WeakMap;const inst2beh=new WeakMap;const tileConvexPolyCache=new WeakMap;const TILE_FLIPPED_HORIZONTAL=-2147483648;const TILE_FLIPPED_VERTICAL=1073741824;const TILE_FLIPPED_DIAGONAL=
-536870912;const TILE_FLAGS_MASK=3758096384;const TILE_ID_MASK=536870911;const GetTempVec2A=C3.Behaviors.Physics.GetTempVec2A;const GetTempVec2B=C3.Behaviors.Physics.GetTempVec2B;const tempRect=C3.New(C3.Rect);const tempQuad=C3.New(C3.Quad);C3.Behaviors.Physics.Instance=class PhysicsInstance extends C3.SDKBehaviorInstanceBase{constructor(behInst,properties){super(behInst);const behavior=this.GetBehavior();const wi=this.GetWorldInfo();this._box2d=behavior.GetBox2D();this._world=behavior.GetWorld();
-this._worldScale=behavior.GetWorldScale();this._isImmovable=false;this._collisionMask=0;this._actualCollisionMask=0;this._preventRotation=false;this._density=1;this._friction=.5;this._restitution=.2;this._linearDamping=0;this._angularDamping=.01;this._isBullet=false;this._isEnabled=true;this._body=null;this._fixtures=[];this._myJoints=[];this._myCreatedJoints=[];this._joiningMe=new Set;this._lastKnownX=wi.GetX();this._lastKnownY=wi.GetY();this._lastKnownAngle=wi.GetAngle();this._lastWidth=0;this._lastHeight=
-0;this._lastTickOverride=false;if(properties){this._isImmovable=!!properties[IMMOVABLE];this._collisionMask=properties[COLLISION_MASK];this._preventRotation=!!properties[PREVENT_ROTATION];this._density=properties[DENSITY];this._friction=properties[FRICTION];this._restitution=properties[ELASTICITY];this._linearDamping=properties[LINEAR_DAMPING];this._angularDamping=properties[ANGULAR_DAMPING];this._isBullet=!!properties[BULLET];this._isEnabled=!!properties[ENABLE]}const rt=this._runtime.Dispatcher();
-this._disposables=new C3.CompositeDisposable(C3.Disposable.From(rt,"instancedestroy",e=>this._OnInstanceDestroyed(e.instance)),C3.Disposable.From(rt,"beforeload",()=>this._OnBeforeLoad()),C3.Disposable.From(rt,"afterload",()=>this._OnAfterLoad()));inst2beh.set(this._inst,this);if(this._isEnabled)this._StartTicking()}PostCreate(){this._CreateBody()}Release(){this._DestroyMyJoints();C3.clearArray(this._myCreatedJoints);this._joiningMe.clear();if(this._body){this._DestroyFixtures();this._world["DestroyBody"](this._body);
-this._body=null}super.Release()}_CreateFixture(fixDef){if(!this._body)return;const fixture=this._body["CreateFixture"](fixDef);this._fixtures.push(fixture);return fixture}_DestroyFixtures(){if(!this._body)return;for(const fixture of this._fixtures)this._body["DestroyFixture"](fixture);C3.clearArray(this._fixtures)}_GetBoundingQuadExcludingMesh(){const wi=this.GetWorldInfo();if(wi.HasMesh()){wi.CalculateBbox(tempRect,tempQuad,false);return tempQuad}else return wi.GetBoundingQuad()}_Destroy(o){this._box2d["destroy"](o)}_CreateBody(){if(!this._isEnabled)return;
-const b2FixtureDef=this._box2d["b2FixtureDef"];const b2BodyDef=this._box2d["b2BodyDef"];const wi=this.GetWorldInfo();const hasPoly=wi.HasOwnCollisionPoly();this._actualCollisionMask=this._collisionMask;if(!hasPoly&&!this._inst.HasTilemap()&&this._actualCollisionMask===0)this._actualCollisionMask=1;if(!this._body){const bodyDef=new b2BodyDef;bodyDef["set_type"](this._isImmovable?0:2);let bodyX=wi.GetX()*this._worldScale;let bodyY=wi.GetY()*this._worldScale;if(this._actualCollisionMask===2){const bquad=
-this._GetBoundingQuadExcludingMesh();bodyX=bquad.midX()*this._worldScale;bodyY=bquad.midY()*this._worldScale}bodyDef["set_position"](GetTempVec2B(bodyX,bodyY));bodyDef["set_angle"](wi.GetAngle());bodyDef["set_fixedRotation"](this._preventRotation);bodyDef["set_linearDamping"](this._linearDamping);bodyDef["set_angularDamping"](this._angularDamping);bodyDef["set_bullet"](this._isBullet);this._body=this._world["CreateBody"](bodyDef);this._Destroy(bodyDef);body2beh.set(this._body,this)}this._DestroyFixtures();
-const fixDef=new b2FixtureDef;fixDef["set_density"](this._density);fixDef["set_friction"](this._friction);fixDef["set_restitution"](this._restitution);const instW=Math.max(Math.abs(wi.GetWidth()),1);const instH=Math.max(Math.abs(wi.GetHeight()),1);if(this._actualCollisionMask===0)if(this._inst.HasTilemap())this._CreateTilemapFixtures(fixDef);else this._CreatePolygonFixture(fixDef,instW,instH);else if(this._actualCollisionMask===1)this._CreateBoundingBoxFixture(fixDef,wi,instW,instH);else this._CreateCircleFixture(fixDef,
-instW,instH);this._lastWidth=wi.GetWidth();this._lastHeight=wi.GetHeight();wi.SetPhysicsBodyChanged(false);this._Destroy(fixDef)}_CreateBoundingBoxFixture(fixDef,wi,instW,instH){const b2PolygonShape=this._box2d["b2PolygonShape"];const shape=new b2PolygonShape;const fixWidth=instW*this._worldScale;const fixHeight=instH*this._worldScale;let originX=wi.GetOriginX();let originY=wi.GetOriginY();if(wi.GetWidth()<0)originX=1-originX;if(wi.GetHeight()<0)originY=1-originY;const fixOriginX=(.5-originX)*fixWidth;
-const fixOriginY=(.5-originY)*fixHeight;const originVec=C3.Behaviors.Physics.GetVec2(fixOriginX,fixOriginY);shape["SetAsBox"](fixWidth/2,fixHeight/2,originVec,0);fixDef["set_shape"](shape);this._CreateFixture(fixDef);this._Destroy(shape);C3.Behaviors.Physics.FreeVec2(originVec)}_CreateCircleFixture(fixDef,instW,instH){const b2CircleShape=this._box2d["b2CircleShape"];const shape=new b2CircleShape;shape["set_m_radius"](Math.min(instW,instH)*this._worldScale*.5);fixDef["set_shape"](shape);this._CreateFixture(fixDef);
-this._Destroy(shape)}_CreatePolygonFixture(fixDef,instW,instH){const wi=this.GetWorldInfo();const isMirrored=wi.GetWidth()<0;const isFlipped=wi.GetHeight()<0;const worldScale=this._worldScale;const transformedPoly=wi.GetCustomTransformedCollisionPoly(isMirrored?-instW:instW,isFlipped?-instH:instH,0);const ptsArr=transformedPoly.pointsArr();const ptsCount=ptsArr.length/2;const arr=[];for(let i=0;i<ptsCount;++i)arr.push(C3.Behaviors.Physics.GetVec2(ptsArr[i*2],ptsArr[i*2+1]));if(isMirrored!==isFlipped)arr.reverse();
-const convexPolys=C3.Behaviors.Physics.Separator.Separate(arr,instW*instH);for(const v of arr)C3.Behaviors.Physics.FreeVec2(v);if(convexPolys.length)for(const arr2 of convexPolys){for(const vec of arr2){vec["set_x"](vec["get_x"]()*worldScale);vec["set_y"](vec["get_y"]()*worldScale)}const shape=C3.Behaviors.Physics.CreatePolygonShape(arr2);fixDef["set_shape"](shape);this._CreateFixture(fixDef);this._Destroy(shape);for(const v of arr2)C3.Behaviors.Physics.FreeVec2(v)}else this._CreateBoundingBoxFixture(fixDef,
-wi,instW,instH)}_CreateTilemapFixtures(fixDef){const worldScale=this._worldScale;const GetVec2=C3.Behaviors.Physics.GetVec2;const FreeVec2=C3.Behaviors.Physics.FreeVec2;const collRects=[];this._inst.GetSdkInstance().GetAllCollisionRects(collRects);const arr=[];for(let i=0,len=collRects.length;i<len;++i){const c=collRects[i];const rc=c.GetRect();const poly=c.GetPoly();if(poly){let convexPolys=tileConvexPolyCache.get(poly);if(!convexPolys){const ptsArr=poly.pointsArr();const ptsCount=poly.pointCount();
-for(let j=0;j<ptsCount;++j)arr.push(GetVec2(ptsArr[j*2],ptsArr[j*2+1]));const flags=c.GetTileId()&TILE_FLAGS_MASK;if(flags===TILE_FLIPPED_HORIZONTAL||flags===TILE_FLIPPED_VERTICAL||flags===TILE_FLIPPED_DIAGONAL||flags&TILE_FLIPPED_HORIZONTAL&&flags&TILE_FLIPPED_VERTICAL&&flags&TILE_FLIPPED_DIAGONAL)arr.reverse();convexPolys=C3.Behaviors.Physics.Separator.Separate(arr,rc.width()*rc.height());tileConvexPolyCache.set(poly,convexPolys);for(const v of arr)FreeVec2(v);C3.clearArray(arr)}for(let j=0,lenj=
-convexPolys.length;j<lenj;++j){const cp=convexPolys[j];for(let k=0,lenk=cp.length;k<lenk;++k)arr.push(GetVec2((rc.getLeft()+cp[k]["get_x"]())*worldScale,(rc.getTop()+cp[k]["get_y"]())*worldScale));const shape=C3.Behaviors.Physics.CreatePolygonShape(arr);fixDef["set_shape"](shape);this._CreateFixture(fixDef);this._Destroy(shape);for(const v of arr)FreeVec2(v);C3.clearArray(arr)}}else{arr.push(GetVec2(rc.getLeft()*worldScale,rc.getTop()*worldScale));arr.push(GetVec2(rc.getRight()*worldScale,rc.getTop()*
-worldScale));arr.push(GetVec2(rc.getRight()*worldScale,rc.getBottom()*worldScale));arr.push(GetVec2(rc.getLeft()*worldScale,rc.getBottom()*worldScale));const shape=C3.Behaviors.Physics.CreatePolygonShape(arr);fixDef["set_shape"](shape);this._CreateFixture(fixDef);this._Destroy(shape)}for(const v of arr)FreeVec2(v);C3.clearArray(arr)}}_DestroyBody(){if(!this._body)return;this._DestroyMyJoints();body2beh.delete(this._body);this._DestroyFixtures();this._world["DestroyBody"](this._body);this._body=null}_DestroyMyJoints(){for(const joint of this._myJoints)this._world["DestroyJoint"](joint);
-C3.clearArray(this._myJoints)}_RecreateMyJoints(){for(const j of this._myCreatedJoints)switch(j.type){case 0:this._DoCreateDistanceJoint(...j.params);break;case 1:this._DoCreateRevoluteJoint(...j.params);break;case 2:this._DoCreateLimitedRevoluteJoint(...j.params);break;case 3:this._DoCreatePrismaticJoint(...j.params);break;default:}}_GetInstImagePoint(imgPt){const wi=this.GetWorldInfo();if(imgPt===-1)return[wi.GetX(),wi.GetY()];if(imgPt===0&&this._body){const wc=this._body["GetWorldCenter"]();return[wc["get_x"]()/
-this._worldScale,wc["get_y"]()/this._worldScale]}return this._inst.GetImagePoint(imgPt)}_CreateDistanceJoint(imgPt,otherInst,otherImgPt,damping,freq){if(!this._isEnabled||!otherInst||otherInst===this._inst)return;const otherBehInst=C3.Behaviors.Physics.Instance.LookupBehInstFromInst(otherInst);if(!otherBehInst||!otherBehInst._IsEnabled())return;this._myCreatedJoints.push({type:0,params:[imgPt,otherInst.GetUID(),otherImgPt,damping,freq]});this._DoCreateDistanceJoint(imgPt,otherInst.GetUID(),otherImgPt,
-damping,freq)}_DoCreateDistanceJoint(imgPt,otherInstUid,otherImgPt,damping,freq){if(!this._isEnabled)return;const otherInst=this._runtime.GetInstanceByUID(otherInstUid);if(!otherInst||otherInst===this._inst)return;const otherBehInst=C3.Behaviors.Physics.Instance.LookupBehInstFromInst(otherInst);if(!otherBehInst||!otherBehInst._IsEnabled())return;otherBehInst._joiningMe.add(this._inst);this._UpdateBodyToMatchInstance(false);otherBehInst._UpdateBodyToMatchInstance(false);const [myX,myY]=this._GetInstImagePoint(imgPt);
-const [theirX,theirY]=otherInst.GetImagePoint(otherImgPt);const dx=myX-theirX;const dy=myY-theirY;const b2DistanceJointDef=this._box2d["b2DistanceJointDef"];const worldScale=this._worldScale;const jointDef=new b2DistanceJointDef;jointDef["Initialize"](this._body,otherBehInst.GetBody(),GetTempVec2A(myX*worldScale,myY*worldScale),GetTempVec2B(theirX*worldScale,theirY*worldScale));jointDef["set_length"](Math.hypot(dx,dy)*worldScale);jointDef["set_dampingRatio"](damping);jointDef["set_frequencyHz"](freq);
-this._myJoints.push(this._world["CreateJoint"](jointDef));this._Destroy(jointDef)}_CreateRevoluteJoint(imgPt,otherInst){if(!this._isEnabled||!otherInst||otherInst===this._inst)return;const otherBehInst=C3.Behaviors.Physics.Instance.LookupBehInstFromInst(otherInst);if(!otherBehInst||!otherBehInst._IsEnabled())return;this._myCreatedJoints.push({type:1,params:[imgPt,otherInst.GetUID()]});this._DoCreateRevoluteJoint(imgPt,otherInst.GetUID())}_DoCreateRevoluteJoint(imgPt,otherInstUid){if(!this._isEnabled)return;
-const otherInst=this._runtime.GetInstanceByUID(otherInstUid);if(!otherInst||otherInst===this._inst)return;const otherBehInst=C3.Behaviors.Physics.Instance.LookupBehInstFromInst(otherInst);if(!otherBehInst||!otherBehInst._IsEnabled())return;otherBehInst._joiningMe.add(this._inst);this._UpdateBodyToMatchInstance(false);otherBehInst._UpdateBodyToMatchInstance(false);const [myX,myY]=this._GetInstImagePoint(imgPt);const b2RevoluteJointDef=this._box2d["b2RevoluteJointDef"];const worldScale=this._worldScale;
-const jointDef=new b2RevoluteJointDef;jointDef["Initialize"](this._body,otherBehInst.GetBody(),GetTempVec2A(myX*worldScale,myY*worldScale));this._myJoints.push(this._world["CreateJoint"](jointDef));this._Destroy(jointDef)}_CreateLimitedRevoluteJoint(imgPt,otherInst,lower,upper){if(!this._isEnabled||!otherInst||otherInst===this._inst)return;const otherBehInst=C3.Behaviors.Physics.Instance.LookupBehInstFromInst(otherInst);if(!otherBehInst||!otherBehInst._IsEnabled())return;lower=C3.toDegrees(lower);
-upper=C3.toDegrees(upper);this._myCreatedJoints.push({type:2,params:[imgPt,otherInst.GetUID(),lower,upper]});this._DoCreateLimitedRevoluteJoint(imgPt,otherInst.GetUID(),lower,upper)}_DoCreateLimitedRevoluteJoint(imgPt,otherInstUid,lower,upper){if(!this._isEnabled)return;const otherInst=this._runtime.GetInstanceByUID(otherInstUid);if(!otherInst||otherInst===this._inst)return;const otherBehInst=C3.Behaviors.Physics.Instance.LookupBehInstFromInst(otherInst);if(!otherBehInst||!otherBehInst._IsEnabled())return;
-otherBehInst._joiningMe.add(this._inst);this._UpdateBodyToMatchInstance(false);otherBehInst._UpdateBodyToMatchInstance(false);const [myX,myY]=this._GetInstImagePoint(imgPt);const b2RevoluteJointDef=this._box2d["b2RevoluteJointDef"];const worldScale=this._worldScale;const jointDef=new b2RevoluteJointDef;jointDef["Initialize"](this._body,otherBehInst.GetBody(),GetTempVec2A(myX*worldScale,myY*worldScale));jointDef["set_enableLimit"](true);jointDef["set_lowerAngle"](C3.toRadians(lower));jointDef["set_upperAngle"](C3.toRadians(upper));
-this._myJoints.push(this._world["CreateJoint"](jointDef));this._Destroy(jointDef)}_CreatePrismaticJoint(imgPt,otherInst,axisAngle,enableLimit,lowerTranslation,upperTranslation,enableMotor,motorSpeed,maxMotorForce){if(!this._isEnabled||!otherInst||otherInst===this._inst)return;const otherBehInst=C3.Behaviors.Physics.Instance.LookupBehInstFromInst(otherInst);if(!otherBehInst||!otherBehInst._IsEnabled())return;axisAngle=C3.toDegrees(axisAngle);motorSpeed=C3.toDegrees(motorSpeed);this._myCreatedJoints.push({type:3,
-params:[imgPt,otherInst.GetUID(),axisAngle,enableLimit,lowerTranslation,upperTranslation,enableMotor,motorSpeed,maxMotorForce]});this._DoCreatePrismaticJoint(imgPt,otherInst.GetUID(),axisAngle,enableLimit,lowerTranslation,upperTranslation,enableMotor,motorSpeed,maxMotorForce)}_DoCreatePrismaticJoint(imgPt,otherInstUid,axisAngle,enableLimit,lowerTranslation,upperTranslation,enableMotor,motorSpeed,maxMotorForce){if(!this._isEnabled)return;const otherInst=this._runtime.GetInstanceByUID(otherInstUid);
-if(!otherInst||otherInst===this._inst)return;const otherBehInst=C3.Behaviors.Physics.Instance.LookupBehInstFromInst(otherInst);if(!otherBehInst||!otherBehInst._IsEnabled())return;otherBehInst._joiningMe.add(this._inst);this._UpdateBodyToMatchInstance(false);otherBehInst._UpdateBodyToMatchInstance(false);const [myX,myY]=this._GetInstImagePoint(imgPt);axisAngle=C3.toRadians(axisAngle);const axisX=Math.cos(axisAngle);const axisY=Math.sin(axisAngle);const b2PrismaticJointDef=this._box2d["b2PrismaticJointDef"];
-const worldScale=this._worldScale;const jointDef=new b2PrismaticJointDef;jointDef["Initialize"](this._body,otherBehInst.GetBody(),GetTempVec2A(myX*worldScale,myY*worldScale),GetTempVec2B(axisX,axisY));jointDef["set_enableLimit"](!!enableLimit);jointDef["set_lowerTranslation"](lowerTranslation*worldScale);jointDef["set_upperTranslation"](upperTranslation*worldScale);jointDef["set_enableMotor"](!!enableMotor);jointDef["set_motorSpeed"](C3.toRadians(motorSpeed));jointDef["set_maxMotorForce"](maxMotorForce);
-this._myJoints.push(this._world["CreateJoint"](jointDef));this._Destroy(jointDef)}_RemoveJoints(){if(!this._isEnabled)return;this._DestroyMyJoints();C3.clearArray(this._myCreatedJoints);this._joiningMe.clear()}_RemoveOtherInstanceJointsToMe(){for(const otherInst of this._joiningMe){const otherBehInst=C3.Behaviors.Physics.Instance.LookupBehInstFromInst(otherInst);if(!otherBehInst||!otherBehInst._IsEnabled())return;otherBehInst._DestroyJointsForInstance(this._inst)}this._joiningMe.clear()}_OnInstanceDestroyed(inst){this._DestroyJointsForInstance(inst)}_DestroyJointsForInstance(inst){const instUid=
-inst.GetUID();let j=0;for(let i=0,len=this._myCreatedJoints.length;i<len;++i){this._myCreatedJoints[j]=this._myCreatedJoints[i];if(j<this._myJoints.length)this._myJoints[j]=this._myJoints[i];if(this._myCreatedJoints[i].params[1]===instUid){if(i<this._myJoints.length)this._world["DestroyJoint"](this._myJoints[i])}else++j}C3.truncateArray(this._myCreatedJoints,j);if(j<this._myJoints.length)C3.truncateArray(this._myJoints,j);this._joiningMe.delete(inst)}GetBody(){return this._body}static LookupBehInstFromBody(body){return body2beh.get(body)||
-null}static LookupBehInstFromInst(inst){return inst2beh.get(inst)||null}SaveToJson(){const ret={"e":this._isEnabled,"im":this._isImmovable,"pr":this._preventRotation,"d":this._density,"fr":this._friction,"re":this._restitution,"ld":this._linearDamping,"ad":this._angularDamping,"b":this._isBullet,"mcj":this._myCreatedJoints};if(this._isEnabled){const v=this._body["GetLinearVelocity"]();ret["vx"]=v["get_x"]();ret["vy"]=v["get_y"]();ret["om"]=this._body["GetAngularVelocity"]()}return ret}_OnBeforeLoad(){this._DestroyMyJoints();
-C3.clearArray(this._myCreatedJoints);this._joiningMe.clear()}LoadFromJson(o){this._DestroyBody();this._isEnabled=o["e"];if(o.hasOwnProperty("im"))this._isImmovable=!!o["im"];this._preventRotation=o["pr"];this._density=o["d"];this._friction=o["fr"];this._restitution=o["re"];this._linearDamping=o["ld"];this._angularDamping=o["ad"];this._isBullet=o["b"];this._myCreatedJoints=o["mcj"];const wi=this.GetWorldInfo();this._lastKnownX=wi.GetX();this._lastKnownY=wi.GetY();this._lastKnownAngle=wi.GetAngle();
-this._lastWidth=wi.GetWidth();this._lastHeight=wi.GetHeight();if(this._isEnabled){this._CreateBody();this._body["SetLinearVelocity"](GetTempVec2A(o["vx"],o["vy"]));this._body["SetAngularVelocity"](o["om"]);if(o["vx"]!==0||o["vy"]!==0||o["om"]!==0)this._body["SetAwake"](true);this._myCreatedJoints=o["mcj"]}if(this._isEnabled)this._StartTicking();else this._StopTicking()}_OnAfterLoad(){if(this._isEnabled)this._RecreateMyJoints()}Tick(){if(!this._isEnabled)return;const runtime=this._runtime;const behavior=
-this.GetBehavior();let dt=0;if(behavior.GetSteppingMode()===0)dt=runtime.GetTimeScale()/60;else{dt=runtime.GetDt(this._inst);if(dt>1/30)dt=1/30}const tickCount=runtime.GetTickCountNoSave();if(tickCount>behavior.GetLastUpdateTick()&&runtime.GetTimeScale()>0){const isDebug=this._runtime.IsDebug();let startTime=0;if(isDebug)startTime=performance.now();if(dt!==0)this._world["Step"](dt,behavior.GetVelocityIterations(),behavior.GetPositionIterations());this._world["ClearForces"]();if(isDebug)self.C3Debugger.AddPhysicsTime(performance.now()-
-startTime);behavior.SetLastUpdateTick(tickCount)}this._UpdateBodyToMatchInstance(true)}_UpdateBodyToMatchInstance(isTickUpdate){const inst=this._inst;const wi=inst.GetWorldInfo();const worldScale=this._worldScale;if(wi.GetWidth()!==this._lastWidth||wi.GetHeight()!==this._lastHeight||wi.IsPhysicsBodyChanged())this._CreateBody();const body=this._body;const curX=wi.GetX();const curY=wi.GetY();const diffX=curX-this._lastKnownX;const diffY=curY-this._lastKnownY;const POS_EPSILON=.001;const posChanged=
-Math.abs(diffX)>POS_EPSILON||Math.abs(diffY)>POS_EPSILON;const angleChanged=wi.GetAngle()!==this._lastKnownAngle;let newBodyX=curX;let newBodyY=curY;if(this._actualCollisionMask===2){const bquad=this._GetBoundingQuadExcludingMesh();newBodyX=bquad.midX();newBodyY=bquad.midY()}if(posChanged){if(angleChanged)body["SetTransform"](GetTempVec2A(newBodyX*worldScale,newBodyY*worldScale),wi.GetAngle());else body["SetTransform"](GetTempVec2A(newBodyX*worldScale,newBodyY*worldScale),body["GetAngle"]());if(isTickUpdate){body["SetLinearVelocity"](GetTempVec2A(diffX,
-diffY));this._lastTickOverride=true}body["SetAwake"](true)}else if(isTickUpdate&&this._lastTickOverride){this._lastTickOverride=false;body["SetLinearVelocity"](GetTempVec2A(0,0));body["SetTransform"](GetTempVec2A(newBodyX*worldScale,newBodyY*worldScale),body["GetAngle"]())}if(!posChanged&&angleChanged){body["SetTransform"](body["GetPosition"](),wi.GetAngle());body["SetAwake"](true)}const pos=body["GetPosition"]();const newX=pos["get_x"]()/worldScale;const newY=pos["get_y"]()/worldScale;const newAngle=
-body["GetAngle"]();if(newX!==wi.GetX()||newY!==wi.GetY()||newAngle!==wi.GetAngle()){wi.SetXY(newX,newY);wi.SetAngle(newAngle);wi.SetBboxChanged();if(this._actualCollisionMask===2){const bquad=this._GetBoundingQuadExcludingMesh();const dx=bquad.midX()-wi.GetX();const dy=bquad.midY()-wi.GetY();if(dx!==0||dy!==0){wi.OffsetXY(-dx,-dy);wi.SetBboxChanged()}}}this._lastKnownX=wi.GetX();this._lastKnownY=wi.GetY();this._lastKnownAngle=wi.GetAngle()}GetPropertyValueByIndex(index){switch(index){case PREVENT_ROTATION:return this._IsPreventRotate();
-case DENSITY:return this._GetDensity();case FRICTION:return this._GetFriction();case ELASTICITY:return this._GetElasticity();case LINEAR_DAMPING:return this._GetLinearDamping();case ANGULAR_DAMPING:return this._GetAngularDamping();case BULLET:return this._IsBullet();case ENABLE:return this._IsEnabled()}}SetPropertyValueByIndex(index,value){switch(index){case PREVENT_ROTATION:this._SetPreventRotate(value);break;case DENSITY:this._SetDensity(value);break;case FRICTION:this._SetFriction(value);break;
-case ELASTICITY:this._SetElasticity(value);break;case LINEAR_DAMPING:this._SetLinearDamping(value);break;case ANGULAR_DAMPING:this._SetAngularDamping(value);break;case BULLET:this._SetBullet(value);break;case ENABLE:this._SetEnabled(value);break}}_SetEnabled(e){e=!!e;if(this._isEnabled&&!e){this._RemoveOtherInstanceJointsToMe();this._DestroyBody();this._isEnabled=false;this._StopTicking()}else if(!this._isEnabled&&e){this._isEnabled=true;this._CreateBody();this._StartTicking()}}_IsEnabled(){return this._isEnabled}GetDebuggerProperties(){const prefix=
-"behaviors.physics";const props=[{name:prefix+".properties.enabled.name",value:this._IsEnabled(),onedit:v=>this._SetEnabled(v)},{name:prefix+".properties.immovable.name",value:this._IsImmovable(),onedit:v=>this._SetImmovable(v)},{name:prefix+".properties.density.name",value:this._GetDensity(),onedit:v=>this._SetDensity(v)},{name:prefix+".properties.friction.name",value:this._GetFriction(),onedit:v=>this._SetFriction(v)},{name:prefix+".properties.elasticity.name",value:this._GetElasticity(),onedit:v=>
-this._SetElasticity(v)},{name:prefix+".properties.linear-damping.name",value:this._GetLinearDamping(),onedit:v=>this._SetLinearDamping(v)},{name:prefix+".properties.angular-damping.name",value:this._GetAngularDamping(),onedit:v=>this._SetAngularDamping(v)}];if(this._isEnabled){props.push({name:prefix+".debugger.is-sleeping",value:!this._IsAwake()});props.push({name:prefix+".debugger.velocity-x",value:this._GetVelocityX(),onedit:v=>this._SetVelocity(v,this._GetVelocityY())});props.push({name:prefix+
-".debugger.velocity-y",value:this._GetVelocityY(),onedit:v=>this._SetVelocity(this._GetVelocityX(),v)});props.push({name:prefix+".debugger.angular-velocity",value:C3.toDegrees(this._GetAngularVelocity()),onedit:v=>this._SetAngularVelocity(C3.toRadians(v))});props.push({name:prefix+".debugger.mass",value:this._GetMass()})}return[{title:"$"+this.GetBehaviorType().GetName(),properties:props}]}_ApplyForce(fx,fy,imgPt){const [x,y]=this._GetInstImagePoint(imgPt);this._DoApplyForce(fx,fy,x,y)}_ApplyForceToward(f,
-px,py,imgPt){const [x,y]=this._GetInstImagePoint(imgPt);const a=C3.angleTo(x,y,px,py);this._DoApplyForce(Math.cos(a)*f,Math.sin(a)*f,x,y)}_ApplyForceAtAngle(f,a,imgPt){const [x,y]=this._GetInstImagePoint(imgPt);this._DoApplyForce(Math.cos(a)*f,Math.sin(a)*f,x,y)}_DoApplyForce(fx,fy,ox,oy){if(!this._isEnabled)return;const worldScale=this._worldScale;this._body["ApplyForce"](GetTempVec2A(fx,fy),GetTempVec2B(ox*worldScale,oy*worldScale),true)}_ApplyImpulse(fx,fy,imgPt){const [x,y]=this._GetInstImagePoint(imgPt);
-this._DoApplyImpulse(fx,fy,x,y)}_ApplyImpulseToward(f,px,py,imgPt){const [x,y]=this._GetInstImagePoint(imgPt);const a=C3.angleTo(x,y,px,py);this._DoApplyImpulse(Math.cos(a)*f,Math.sin(a)*f,x,y)}_ApplyImpulseAtAngle(f,a,imgPt){const [x,y]=this._GetInstImagePoint(imgPt);this._DoApplyImpulse(Math.cos(a)*f,Math.sin(a)*f,x,y)}_DoApplyImpulse(fx,fy,ox,oy){if(!this._isEnabled)return;const worldScale=this._worldScale;this._body["ApplyLinearImpulse"](GetTempVec2A(fx,fy),GetTempVec2B(ox*worldScale,oy*worldScale),
-true);const wi=this.GetWorldInfo();this._lastKnownX=wi.GetX();this._lastKnownY=wi.GetY();this._lastTickOverride=false}_ApplyTorque(m){if(!this._isEnabled)return;this._body["ApplyTorque"](m,true)}_ApplyTorqueToAngle(m,a){const f=C3.angleClockwise(this.GetWorldInfo().GetAngle(),a)?-1:1;this._ApplyTorque(m*f)}_ApplyTorqueToPosition(m,x,y){const wi=this.GetWorldInfo();const a=C3.angleTo(wi.GetX(),wi.GetY(),x,y);const f=C3.angleClockwise(wi.GetAngle(),a)?-1:1;this._ApplyTorque(m*f)}_SetAngularVelocity(v){if(!this._isEnabled)return;
-this._body["SetAngularVelocity"](v);this._body["SetAwake"](true)}_GetAngularVelocity(){return this._isEnabled?this._body["GetAngularVelocity"]():0}_SetVelocity(vx,vy){if(!this._isEnabled)return;const worldScale=this._worldScale;this._body["SetLinearVelocity"](GetTempVec2A(vx*worldScale,vy*worldScale));this._body["SetAwake"](true);const wi=this.GetWorldInfo();this._lastKnownX=wi.GetX();this._lastKnownY=wi.GetY();this._lastTickOverride=false}_GetVelocity(){if(!this._isEnabled)return[0,0];const worldScale=
-this._worldScale;const vec=this._body["GetLinearVelocity"]();return[vec["get_x"]()/worldScale,vec["get_y"]()/worldScale]}_GetVelocityX(){return this._isEnabled?this._body["GetLinearVelocity"]()["get_x"]()/this._worldScale:0}_GetVelocityY(){return this._isEnabled?this._body["GetLinearVelocity"]()["get_y"]()/this._worldScale:0}_Teleport(x,y){if(!this._isEnabled)return;const worldScale=this._worldScale;this._body["SetTransform"](GetTempVec2A(x*worldScale,y*worldScale),this._body["GetAngle"]());const wi=
-this.GetWorldInfo();wi.SetXY(x,y);wi.SetBboxChanged();this._lastKnownX=wi.GetX();this._lastKnownY=wi.GetY()}_SetDensity(d){if(!this._isEnabled)return;if(this._density===d)return;this._density=d;for(const fixture of this._fixtures)fixture["SetDensity"](d);this._body["ResetMassData"]()}_GetDensity(){return this._isEnabled?this._density:0}_SetFriction(f){if(!this._isEnabled)return;if(this._friction===f)return;this._friction=f;for(const fixture of this._fixtures)fixture["SetFriction"](f);for(let contactEdge=
-this._body["GetContactList"]();this._box2d["getPointer"](contactEdge);contactEdge=contactEdge["get_next"]()){const contact=contactEdge["get_contact"]();if(contact)contact["ResetFriction"]()}}_GetFriction(){return this._isEnabled?this._friction:0}_SetElasticity(e){if(!this._isEnabled)return;if(this._restitution===e)return;this._restitution=e;for(const fixture of this._fixtures)fixture["SetRestitution"](e)}_GetElasticity(){return this._isEnabled?this._restitution:0}_SetLinearDamping(ld){if(!this._isEnabled)return;
-if(this._linearDamping===ld)return;this._linearDamping=ld;this._body["SetLinearDamping"](ld)}_GetLinearDamping(){return this._isEnabled?this._linearDamping:0}_SetAngularDamping(ad){if(!this._isEnabled)return;if(this._angularDamping===ad)return;this._angularDamping=ad;this._body["SetAngularDamping"](ad)}_GetAngularDamping(){return this._isEnabled?this._angularDamping:0}_SetImmovable(i){if(!this._isEnabled)return;i=!!i;if(this._isImmovable===i)return;this._isImmovable=i;this._body["SetType"](this._isImmovable?
-0:2);this._body["SetAwake"](true)}_IsImmovable(){return this._isImmovable}_SetPreventRotate(i){if(!this._isEnabled)return;i=!!i;if(this._preventRotation===i)return;this._preventRotation=i;this._body["SetFixedRotation"](this._preventRotation);this._body["SetAngularVelocity"](0);this._body["SetAwake"](true)}_IsPreventRotate(){return this._preventRotation}_SetBullet(i){if(!this._isEnabled)return;i=!!i;if(this._isBullet===i)return;this._isBullet=i;this._body["SetBullet"](this._isBullet);this._body["SetAwake"](true)}_IsBullet(){return this._isBullet}_SetAwake(a){if(!this._isEnabled)return;
-this._body["SetAwake"](!!a)}_IsAwake(){if(!this._isEnabled)return false;return this._body["IsAwake"]()}_GetMass(){return this._isEnabled?this._body["GetMass"]()/this._worldScale:0}_GetCenterOfMassX(){return this._isEnabled?this._body["GetWorldCenter"]()["get_x"]()/this._worldScale:0}_GetCenterOfMassY(){return this._isEnabled?this._body["GetWorldCenter"]()["get_y"]()/this._worldScale:0}_GetCenterOfMass(){if(!this._isEnabled)return[0,0];const centerVec=this._body["GetWorldCenter"]();const worldScale=
-this._worldScale;return[centerVec["get_x"]()/worldScale,centerVec["get_y"]()/worldScale]}_GetContactCount(){if(!this._isEnabled)return 0;let count=0;for(let contactEdge=this._body["GetContactList"]();this._box2d["getPointer"](contactEdge);contactEdge=contactEdge["get_next"]()){const contact=contactEdge["get_contact"]();if(!contact)continue;const manifold=contact["GetManifold"]();const pointCount=manifold["get_pointCount"]();count+=pointCount}return count}_GetContactPositionAt(index){index=Math.floor(index);
-if(!this._isEnabled)return[0,0];let count=0;for(let contactEdge=this._body["GetContactList"]();this._box2d["getPointer"](contactEdge);contactEdge=contactEdge["get_next"]()){const contact=contactEdge["get_contact"]();if(!contact)continue;const manifold=contact["GetManifold"]();const pointCount=manifold["get_pointCount"]();if(index>=count&&index<count+pointCount){const i=index-count;const worldManifold=this.GetBehavior().GetWorldManifold();contact["GetWorldManifold"](worldManifold);const vec=worldManifold["get_points"](i);
-return[vec["get_x"]()/this._worldScale,vec["get_y"]()/this._worldScale]}else count+=pointCount}return[0,0]}GetScriptInterfaceClass(){return self.IPhysicsBehaviorInstance}};const map=new WeakMap;function UnwrapIWorldInstance(this_,iinst){const runtime=map.get(this_).GetRuntime();return runtime._UnwrapIWorldInstance(iinst)}self.IPhysicsBehaviorInstance=class IPhysicsBehaviorInstance extends IBehaviorInstance{constructor(){super();map.set(this,IBehaviorInstance._GetInitInst().GetSdkInstance())}get isEnabled(){return map.get(this)._IsEnabled()}set isEnabled(e){map.get(this)._SetEnabled(e)}applyForce(fx,
-fy,imgPt=0){C3X.RequireFiniteNumber(fx);C3X.RequireFiniteNumber(fy);map.get(this)._ApplyForce(fx,fy,imgPt)}applyForceTowardPosition(f,px,py,imgPt=0){C3X.RequireFiniteNumber(f);C3X.RequireFiniteNumber(px);C3X.RequireFiniteNumber(py);map.get(this)._ApplyForceToward(f,px,py,imgPt)}applyForceAtAngle(f,a,imgPt=0){C3X.RequireFiniteNumber(f);C3X.RequireFiniteNumber(a);map.get(this)._ApplyForceAtAngle(f,a,imgPt)}applyImpulse(ix,iy,imgPt=0){C3X.RequireFiniteNumber(ix);C3X.RequireFiniteNumber(iy);map.get(this)._ApplyImpulse(ix,
-iy,imgPt)}applyImpulseTowardPosition(i,px,py,imgPt=0){C3X.RequireFiniteNumber(i);C3X.RequireFiniteNumber(px);C3X.RequireFiniteNumber(py);map.get(this)._ApplyImpulseToward(i,px,py,imgPt)}applyImpulseAtAngle(i,a,imgPt=0){C3X.RequireFiniteNumber(i);C3X.RequireFiniteNumber(a);map.get(this)._ApplyImpulseAtAngle(i,a,imgPt)}applyTorque(m){C3X.RequireFiniteNumber(m);map.get(this)._ApplyTorque(m)}applyTorqueToAngle(m,a){C3X.RequireFiniteNumber(m);C3X.RequireFiniteNumber(a);map.get(this)._ApplyTorqueToAngle(m,
-a)}applyTorqueToPosition(m,px,py){C3X.RequireFiniteNumber(m);C3X.RequireFiniteNumber(px);C3X.RequireFiniteNumber(py);map.get(this)._ApplyTorqueToPosition(m,px,py)}set angularVelocity(v){C3X.RequireFiniteNumber(v);map.get(this)._SetAngularVelocity(v)}get angularVelocity(){return map.get(this)._GetAngularVelocity()}setVelocity(vx,vy){C3X.RequireFiniteNumber(vx);C3X.RequireFiniteNumber(vy);map.get(this)._SetVelocity(vx,vy)}getVelocityX(){return map.get(this)._GetVelocityX()}getVelocityY(){return map.get(this)._GetVelocityY()}getVelocity(){return map.get(this)._GetVelocity()}teleport(x,
-y){C3X.RequireFiniteNumber(x);C3X.RequireFiniteNumber(y);map.get(this)._Teleport(x,y)}set density(d){C3X.RequireFiniteNumber(d);map.get(this)._SetDensity(d)}get density(){return map.get(this)._GetDensity()}set friction(f){C3X.RequireFiniteNumber(f);map.get(this)._SetFriction(f)}get friction(){return map.get(this)._GetFriction()}set elasticity(e){C3X.RequireFiniteNumber(e);map.get(this)._SetElasticity(e)}get elasticity(){return map.get(this)._GetElasticity()}set linearDamping(ld){C3X.RequireFiniteNumber(ld);
-map.get(this)._SetLinearDamping(ld)}get linearDamping(){return map.get(this)._GetLinearDamping()}set angularDamping(ad){C3X.RequireFiniteNumber(ad);map.get(this)._SetAngularDamping(ad)}get angularDamping(){return map.get(this)._GetAngularDamping()}set isImmovable(i){map.get(this)._SetImmovable(i)}get isImmovable(){return map.get(this)._IsImmovable()}set isPreventRotation(p){map.get(this)._SetPreventRotate(p)}get isPreventRotation(){return map.get(this)._IsPreventRotate()}set isBullet(b){map.get(this)._SetBullet(b)}get isBullet(){return map.get(this)._IsBullet()}get mass(){return map.get(this)._GetMass()}getCenterOfMassX(){return map.get(this)._GetCenterOfMassX()}getCenterOfMassY(){return map.get(this)._GetCenterOfMassY()}getCenterOfMass(){return map.get(this)._GetCenterOfMass()}getContactCount(){return map.get(this)._GetContactCount()}getContactX(index){C3X.RequireFiniteNumber(index);
-return map.get(this)._GetContactPositionAt(index)[0]}getContactY(index){C3X.RequireFiniteNumber(index);return map.get(this)._GetContactPositionAt(index)[1]}getContact(index){C3X.RequireFiniteNumber(index);return map.get(this)._GetContactPositionAt(index)}set isAwake(a){map.get(this)._SetAwake(!!a)}get isAwake(){return map.get(this)._IsAwake()}get isSleeping(){return!map.get(this)._IsAwake()}createDistanceJoint(imgPt,iOtherInst,otherImgPt,damping,freq){C3X.RequireFiniteNumber(damping);C3X.RequireFiniteNumber(freq);
-const otherInst=UnwrapIWorldInstance(this,iOtherInst);map.get(this)._CreateDistanceJoint(imgPt,otherInst,otherImgPt,damping,freq)}createRevoluteJoint(imgPt,iOtherInst){const otherInst=UnwrapIWorldInstance(this,iOtherInst);map.get(this)._CreateRevoluteJoint(imgPt,otherInst)}createLimitedRevoluteJoint(imgPt,iOtherInst,lower,upper){C3X.RequireFiniteNumber(lower);C3X.RequireFiniteNumber(upper);const otherInst=UnwrapIWorldInstance(this,iOtherInst);map.get(this)._CreateLimitedRevoluteJoint(imgPt,otherInst,
-lower,upper)}createPrismaticJoint(imgPt,iOtherInst,axisAngle,enableLimit,lowerTranslation,upperTranslation,enableMotor,motorSpeed,maxMotorForce){const otherInst=UnwrapIWorldInstance(this,iOtherInst);map.get(this)._CreatePrismaticJoint(imgPt,otherInst,axisAngle,enableLimit,lowerTranslation,upperTranslation,enableMotor,motorSpeed,maxMotorForce)}removeAllJoints(){map.get(this)._RemoveJoints()}}}
-{const C3=self.C3;C3.Behaviors.Physics.Cnds={IsSleeping(){return!this._IsAwake()},CompareVelocity(which,cmp,x){if(!this._isEnabled)return false;let value=0;if(which===0)value=this._GetVelocityX();else if(which===1)value=this._GetVelocityY();else{const [vx,vy]=this._GetVelocity();value=Math.hypot(vx,vy)}return C3.compare(value,cmp,x)},CompareAngularVelocity(cmp,x){if(!this._isEnabled)return false;const av=C3.toDegrees(this._GetAngularVelocity());return C3.compare(av,cmp,x)},CompareMass(cmp,x){if(!this._isEnabled)return false;
-const mass=this._GetMass();return C3.compare(mass,cmp,x)},IsEnabled(){return this._IsEnabled()}}}
-{const C3=self.C3;C3.Behaviors.Physics.Acts={ApplyForce(fx,fy,imgPt){this._ApplyForce(fx,fy,imgPt)},ApplyForceToward(f,px,py,imgPt){this._ApplyForceToward(f,px,py,imgPt)},ApplyForceAtAngle(f,a,imgPt){this._ApplyForceAtAngle(f,C3.toRadians(a),imgPt)},ApplyImpulse(fx,fy,imgPt){this._ApplyImpulse(fx,fy,imgPt)},ApplyImpulseToward(f,px,py,imgPt){this._ApplyImpulseToward(f,px,py,imgPt)},ApplyImpulseAtAngle(f,a,imgPt){this._ApplyImpulseAtAngle(f,C3.toRadians(a),imgPt)},ApplyTorque(m){this._ApplyTorque(C3.toRadians(m))},
-ApplyTorqueToAngle(m,a){this._ApplyTorqueToAngle(C3.toRadians(m),C3.toRadians(a))},ApplyTorqueToPosition(m,x,y){this._ApplyTorqueToPosition(C3.toRadians(m),x,y)},SetAngularVelocity(v){this._SetAngularVelocity(C3.toRadians(v))},CreateDistanceJoint(imgPt,objectClass,otherImgPt,damping,freq){if(!objectClass)return;const otherInst=objectClass.GetFirstPicked(this._inst);this._CreateDistanceJoint(imgPt,otherInst,otherImgPt,damping,freq)},CreateRevoluteJoint(imgPt,objectClass){if(!objectClass)return;const otherInst=
-objectClass.GetFirstPicked(this._inst);this._CreateRevoluteJoint(imgPt,otherInst)},CreateLimitedRevoluteJoint(imgPt,objectClass,lower,upper){if(!objectClass)return;const otherInst=objectClass.GetFirstPicked(this._inst);this._CreateLimitedRevoluteJoint(imgPt,otherInst,C3.toRadians(lower),C3.toRadians(upper))},CreatePrismaticJoint(imgPt,objectClass,axisAngle,enableLimit,lowerTranslation,upperTranslation,enableMotor,motorSpeed,maxMotorForce){if(!objectClass)return;const otherInst=objectClass.GetFirstPicked(this._inst);
-this._CreatePrismaticJoint(imgPt,otherInst,C3.toRadians(axisAngle),enableLimit,lowerTranslation,upperTranslation,enableMotor,C3.toRadians(motorSpeed),maxMotorForce)},RemoveJoints(){this._RemoveJoints()},SetWorldGravity(g){this.GetBehavior().SetGravity(g)},SetSteppingMode(m){this.GetBehavior().SetSteppingMode(m)},SetIterations(vel,pos){this.GetBehavior().SetIterations(vel,pos)},SetVelocity(vx,vy){this._SetVelocity(vx,vy)},Teleport(x,y){this._Teleport(x,y)},SetDensity(d){this._SetDensity(d)},SetFriction(f){this._SetFriction(f)},
-SetElasticity(e){this._SetElasticity(e)},SetLinearDamping(ld){this._SetLinearDamping(ld)},SetAngularDamping(ad){this._SetAngularDamping(ad)},SetImmovable(i){this._SetImmovable(i)},EnableCollisions(objectClass,state){this.GetBehavior().SetCollisionsEnabled(this.GetObjectClass(),objectClass,state!==0)},SetPreventRotate(i){this._SetPreventRotate(i!==0)},SetBullet(i){this._SetBullet(i!==0)},SetAwake(a){this._SetAwake(!!a)},SetEnabled(e){this._SetEnabled(e!==0)}}}
-{const C3=self.C3;C3.Behaviors.Physics.Exps={VelocityX(){return this._GetVelocityX()},VelocityY(){return this._GetVelocityY()},AngularVelocity(){return C3.toDegrees(this._GetAngularVelocity())},Mass(){return this._GetMass()},CenterOfMassX(){return this._GetCenterOfMassX()},CenterOfMassY(){return this._GetCenterOfMassY()},Density(){return this._GetDensity()},Friction(){return this._GetFriction()},Elasticity(){return this._GetElasticity()},LinearDamping(){return this._GetLinearDamping()},AngularDamping(){return this._GetAngularDamping()},
-ContactCount(){return this._GetContactCount()},ContactXAt(i){return this._GetContactPositionAt(i)[0]},ContactYAt(i){return this._GetContactPositionAt(i)[1]}}};
-
-}
-
-{
-'use strict';const C3=self.C3;const b2Separator={};C3.Behaviors.Physics.Separator=b2Separator;const GetVec2=C3.Behaviors.Physics.GetVec2;const FreeVec2=C3.Behaviors.Physics.FreeVec2;function CloneVec2(v){return GetVec2(v["get_x"](),v["get_y"]())}b2Separator.det=function(x1,y1,x2,y2,x3,y3){return x1*y2+x2*y3+x3*y1-y1*x2-y2*x3-y3*x1};
-b2Separator.hitRay=function(x1,y1,x2,y2,x3,y3,x4,y4){const t1=x3-x1,t2=y3-y1,t3=x2-x1,t4=y2-y1,t5=x4-x3,t6=y4-y3,t7=t4*t5-t3*t6;const a=(t5*t2-t6*t1)/t7;const px=x1+a*t3,py=y1+a*t4;const b1=b2Separator.isOnSegment(x2,y2,x1,y1,px,py);const b2=b2Separator.isOnSegment(px,py,x3,y3,x4,y4);if(b1&&b2)return GetVec2(px,py);else return null};
-b2Separator.isOnSegment=function(px,py,x1,y1,x2,y2){const b1=x1+.1>=px&&px>=x2-.1||x1-.1<=px&&px<=x2+.1;const b2=y1+.1>=py&&py>=y2-.1||y1-.1<=py&&py<=y2+.1;return b1&&b2&&b2Separator.isOnLine(px,py,x1,y1,x2,y2)};b2Separator.isOnLine=function(px,py,x1,y1,x2,y2){if(Math.abs(x2-x1)>.1){const a=(y2-y1)/(x2-x1);const possibleY=a*(px-x1)+y1;const diff=Math.abs(possibleY-py);return diff<.1}return Math.abs(px-x1)<.1};
-b2Separator.pointsMatch=function(x1,y1,x2,y2){return Math.abs(x2-x1)<.1&&Math.abs(y2-y1)<.1};
-b2Separator.Separate=function(verticesVec,objarea){const calced=b2Separator.calcShapes(verticesVec);let ret=[];for(let i=0,len=calced.length;i<len;++i){const a=calced[i];const poly=[];let areasum=0;for(let j=0,lenj=a.length;j<lenj;++j){const b=a[j];const c=a[(j+1)%lenj];areasum+=b["get_x"]()*c["get_y"]()-b["get_y"]()*c["get_x"]();poly.push(GetVec2(b["get_x"](),b["get_y"]()))}areasum=Math.abs(areasum/2);if(areasum>=objarea*.001)ret.push(poly);else for(let j=0,lenj=poly.length;j<lenj;j++)FreeVec2(poly[j])}ret=
-SplitConvexPolysOver8Points(ret);return ret};
-b2Separator.calcShapes=function(verticesVec){let vec=[];let i=0,n=0,j=0;let d=0,t=0,dx=0,dy=0,minLen=0;let i1=0,i2=0,i3=0;let p1,p2,p3,v1,v2,v,hitV;let j1=0,j2=0,k=0,h=0;let vec1=[],vec2=[];let isConvex=false;let figsVec=[],queue=[];let pushed=false;queue.push(verticesVec);while(queue.length){vec=queue[0];n=vec.length;isConvex=true;for(i=0;i<n;i++){i1=i;i2=i<n-1?i+1:i+1-n;i3=i<n-2?i+2:i+2-n;p1=vec[i1];p2=vec[i2];p3=vec[i3];d=b2Separator.det(p1["get_x"](),p1["get_y"](),p2["get_x"](),p2["get_y"](),
-p3["get_x"](),p3["get_y"]());if(d<0){isConvex=false;minLen=1E9;for(j=0;j<n;j++)if(j!==i1&&j!==i2){j1=j;j2=j<n-1?j+1:0;v1=vec[j1];v2=vec[j2];v=b2Separator.hitRay(p1["get_x"](),p1["get_y"](),p2["get_x"](),p2["get_y"](),v1["get_x"](),v1["get_y"](),v2["get_x"](),v2["get_y"]());if(v){dx=p2["get_x"]()-v["get_x"]();dy=p2["get_y"]()-v["get_y"]();t=dx*dx+dy*dy;if(t<minLen){h=j1;k=j2;hitV=v;minLen=t}else FreeVec2(v)}}if(minLen===1E9)return[];vec1=[];vec2=[];j1=h;j2=k;v1=vec[j1];v2=vec[j2];pushed=false;if(!b2Separator.pointsMatch(hitV["get_x"](),
-hitV["get_y"](),v2["get_x"](),v2["get_y"]())){vec1.push(hitV);pushed=true}if(!b2Separator.pointsMatch(hitV["get_x"](),hitV["get_y"](),v1["get_x"](),v1["get_y"]())){vec2.push(hitV);pushed=true}if(!pushed)FreeVec2(hitV);h=-1;k=i1;while(true){if(k!==j2)vec1.push(vec[k]);else{if(h<0||h>=n)return[];if(!b2Separator.isOnSegment(v2["get_x"](),v2["get_y"](),vec[h]["get_x"](),vec[h]["get_y"](),p1["get_x"](),p1["get_y"]()))vec1.push(vec[k]);break}h=k;if(k-1<0)k=n-1;else k--}vec1.reverse();h=-1;k=i2;while(true){if(k!==
-j1)vec2.push(vec[k]);else{if(h<0||h>=n)return[];if(k===j1&&!b2Separator.isOnSegment(v1["get_x"](),v1["get_y"](),vec[h]["get_x"](),vec[h]["get_y"](),p2["get_x"](),p2["get_y"]()))vec2.push(vec[k]);break}h=k;if(k+1>n-1)k=0;else k++}queue.push(vec1,vec2);queue.shift();break}}if(isConvex)figsVec.push(queue.shift())}return figsVec};
-function SplitConvexPolysOver8Points(convexPolys){const ret=[];for(const arr of convexPolys)if(arr.length<=8)ret.push(arr);else ret.push.apply(ret,SplitConvexPoly(arr));return ret}function SplitConvexPoly(arr){const ret=[];ret.push(arr.splice(0,8));const first=ret[0][0];let last=ret[0][7];while(arr.length){const poly=arr.splice(0,Math.min(arr.length,6));let nextLast=poly.at(-1);poly.push(CloneVec2(first));poly.push(CloneVec2(last));ret.push(poly);last=nextLast}return ret};
-
-}
-
-{
 'use strict';{const C3=self.C3;C3.Behaviors.destroy=class DestroyOutsideLayoutBehavior extends C3.SDKBehaviorBase{constructor(opts){super(opts)}Release(){super.Release()}}}{const C3=self.C3;C3.Behaviors.destroy.Type=class DestroyOutsideLayoutType extends C3.SDKBehaviorTypeBase{constructor(behaviorType){super(behaviorType)}Release(){super.Release()}OnCreate(){}}}
 {const C3=self.C3;C3.Behaviors.destroy.Instance=class DestroyOutsideLayoutInstance extends C3.SDKBehaviorInstanceBase{constructor(behInst,properties){super(behInst);this._StartTicking()}Release(){super.Release()}Tick(){const wi=this._inst.GetWorldInfo();const bbox=wi.GetBoundingBox();const layout=wi.GetLayout();if(bbox.getRight()<0||bbox.getBottom()<0||bbox.getLeft()>layout.GetWidth()||bbox.getTop()>layout.GetHeight())this._runtime.DestroyInstance(this._inst)}}}
 {const C3=self.C3;C3.Behaviors.destroy.Cnds={}}{const C3=self.C3;C3.Behaviors.destroy.Acts={}}{const C3=self.C3;C3.Behaviors.destroy.Exps={}};
@@ -6048,7 +5941,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Behaviors.Tween,
 		C3.Plugins.Spritefont2,
 		C3.Behaviors.Pin,
-		C3.Behaviors.Physics,
 		C3.Behaviors.destroy,
 		C3.Behaviors.DragnDrop,
 		C3.Plugins.TiledBg,
@@ -6065,21 +5957,21 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Cnds.IsGroupActive,
 		C3.Plugins.Touch.Cnds.OnTouchObject,
 		C3.Plugins.System.Cnds.Compare,
-		C3.Behaviors.Tween.Acts.TweenValue,
 		C3.Plugins.Sprite.Acts.Spawn,
-		C3.Plugins.System.Exps.choose,
+		C3.Plugins.Sprite.Acts.StartAnim,
 		C3.Plugins.System.Acts.AddVar,
 		C3.Plugins.Audio.Acts.PlayByName,
-		C3.Behaviors.Tween.Cnds.IsPlaying,
-		C3.Plugins.Sprite.Acts.SetScale,
-		C3.Behaviors.Tween.Exps.Value,
+		C3.Plugins.System.Exps.choose,
+		C3.Plugins.Sprite.Acts.SetAngle,
+		C3.Plugins.System.Exps.random,
 		C3.Plugins.System.Cnds.EveryTick,
-		C3.Plugins.Sprite.Acts.SetY,
-		C3.Plugins.Sprite.Exps.Y,
 		C3.Plugins.Spritefont2.Acts.SetY,
 		C3.Plugins.Spritefont2.Exps.Y,
+		C3.Plugins.Sprite.Acts.MoveForward,
 		C3.Plugins.Spritefont2.Acts.SetText,
 		C3.Plugins.System.Acts.SetVar,
+		C3.Plugins.Sprite.Acts.SetY,
+		C3.Plugins.Sprite.Exps.Y,
 		C3.Plugins.Sprite.Acts.SetHeight,
 		C3.Plugins.System.Exps.dt,
 		C3.Plugins.Sprite.Acts.SetWidth,
@@ -6089,8 +5981,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Touch.Cnds.OnTouchStart,
 		C3.Plugins.Touch.Cnds.IsTouchingObject,
 		C3.Plugins.System.Cnds.Every,
-		C3.Plugins.Sprite.Acts.SetAngle,
-		C3.Plugins.System.Exps.random,
 		C3.Plugins.System.Acts.CreateObject,
 		C3.Plugins.Sprite.Acts.Destroy,
 		C3.Plugins.Sprite.Cnds.OnCreated,
@@ -6104,6 +5994,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Spritefont2.Acts.SetDefaultColor,
 		C3.Plugins.System.Cnds.TriggerOnce,
 		C3.Plugins.System.Acts.SetBoolVar,
+		C3.Behaviors.Tween.Acts.TweenValue,
 		C3.Plugins.Audio.Acts.FadeVolume,
 		C3.Plugins.Sprite.Acts.SetVisible,
 		C3.ScriptsInEvents.Gamecode_Event60_Act31,
@@ -6170,7 +6061,6 @@ self.C3_JsPropNameTable = [
 	{Item5Price: 0},
 	{MainBackground: 0},
 	{MainPopsicle: 0},
-	{Physics: 0},
 	{DestroyOutsideLayout: 0},
 	{MainBitcoinReward: 0},
 	{Autoclicker: 0},
@@ -6211,14 +6101,18 @@ self.C3_JsPropNameTable = [
 	{progressline: 0},
 	{Background: 0},
 	{LevelText: 0},
+	{FrogSprite: 0},
+	{continuous_touch: 0},
+	{frognut: 0},
 	{ButtonHomeGame: 0},
 	{ButtonSave: 0},
+	{ButtonSoundModify: 0},
 	{ButtonSound: 0},
-	{speakerBtn: 0},
 	{UpgradeBtn: 0},
 	{QuestChestBtn: 0},
 	{AirdropBtn: 0},
 	{InviteFrogsBtn: 0},
+	{dailycompbtn: 0},
 	{Audio: 0},
 	{Keyboard: 0},
 	{Touch: 0},
@@ -6227,7 +6121,6 @@ self.C3_JsPropNameTable = [
 	{Browser: 0},
 	{JSON: 0},
 	{Particles: 0},
-	{Sprite: 0},
 	{GlobalBitcoins: 0},
 	{ClickValueBitcoin: 0},
 	{ClickSeconds: 0},
@@ -6341,14 +6234,17 @@ self.InstanceType = {
 	progressline: class extends self.ISpriteInstance {},
 	Background: class extends self.ITiledBackgroundInstance {},
 	LevelText: class extends self.ISpriteInstance {},
+	FrogSprite: class extends self.ISpriteInstance {},
+	frognut: class extends self.ISpriteInstance {},
 	ButtonHomeGame: class extends self.ISpriteInstance {},
 	ButtonSave: class extends self.ISpriteInstance {},
+	ButtonSoundModify: class extends self.ISpriteInstance {},
 	ButtonSound: class extends self.ISpriteInstance {},
-	speakerBtn: class extends self.ISpriteInstance {},
 	UpgradeBtn: class extends self.ISpriteInstance {},
 	QuestChestBtn: class extends self.ISpriteInstance {},
 	AirdropBtn: class extends self.ISpriteInstance {},
 	InviteFrogsBtn: class extends self.ISpriteInstance {},
+	dailycompbtn: class extends self.ISpriteInstance {},
 	Audio: class extends self.IInstance {},
 	Keyboard: class extends self.IInstance {},
 	Touch: class extends self.IInstance {},
@@ -6356,8 +6252,7 @@ self.InstanceType = {
 	AJAX: class extends self.IInstance {},
 	Browser: class extends self.IInstance {},
 	JSON: class extends self.IJSONInstance {},
-	Particles: class extends self.IParticlesInstance {},
-	Sprite: class extends self.ISpriteInstance {}
+	Particles: class extends self.IParticlesInstance {}
 }
 }
 
@@ -6499,14 +6394,7 @@ self.C3_ExpressionFuncs = [
 		() => "POST",
 		() => "Main Bitcoin Touch",
 		() => 1,
-		() => "BitcoinTween",
-		() => 0.95,
-		() => 0.1,
 		() => "MidLayer",
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-		},
 		() => 0,
 		() => "FrontLayer",
 		p => {
@@ -6520,35 +6408,27 @@ self.C3_ExpressionFuncs = [
 		},
 		() => -5,
 		() => "",
+		() => 5,
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0(135, 225);
+		},
 		() => 2,
 		() => 3,
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0(1, 2, 3, 4, 5, 6, 7, 8);
-		},
 		() => 4,
-		() => 5,
 		() => 6,
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0(1, 2, 3, 4, 5, 6);
-		},
 		() => 7,
 		() => 8,
 		() => 9,
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0(1, 2, 3, 4, 5);
-		},
 		() => 10,
-		p => {
-			const n0 = p._GetNode(0);
-			return () => n0.ExpBehavior("BitcoinTween");
-		},
 		() => "Update",
 		p => {
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpObject() - 3);
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0(5, 10);
 		},
 		p => {
 			const v0 = p._GetNode(0).GetVar();
@@ -6570,6 +6450,10 @@ self.C3_ExpressionFuncs = [
 		p => {
 			const n0 = p._GetNode(0);
 			return () => ((-n0.ExpObject()) + 1850);
+		},
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => (v0.GetValue() * 4);
 		},
 		p => {
 			const n0 = p._GetNode(0);
@@ -6599,7 +6483,7 @@ self.C3_ExpressionFuncs = [
 			return () => f0(185, 538);
 		},
 		() => -100,
-		() => 1400,
+		() => 1600,
 		() => "Upgrades",
 		() => "Upgrade1",
 		() => 100,
@@ -6663,38 +6547,44 @@ self.C3_ExpressionFuncs = [
 		() => "Save Game",
 		() => "BStop",
 		() => 50,
+		() => 0.1,
 		() => "Sound",
-		() => "SoundOff",
-		() => "SoundOn",
+		() => "speakeroff",
+		() => "speakeron",
 		() => "Initial Values",
 		() => -10,
 		() => "CombosMultiplier",
 		() => 0.04,
 		() => 0.035,
 		() => 0.03,
-		() => 399,
+		() => 99,
 		() => 15,
-		() => 385,
+		() => 89,
 		() => "c1",
+		() => "level1",
 		() => "c2",
+		() => "level2",
 		() => "c3",
+		() => "level3",
 		() => "c4",
+		() => "level4",
 		() => "c5",
+		() => "level5",
 		() => "c6",
+		() => "level6",
 		() => "c7",
+		() => "level7",
 		() => "c8",
+		() => "level8",
 		() => "c9",
+		() => "level9",
 		() => "c10",
+		() => "level10",
 		() => -8,
 		() => 365,
 		() => 348,
-		() => 562,
-		() => 719,
-		() => 592,
-		() => 866,
-		() => 522,
-		() => 209,
-		() => "B2Muted",
+		() => 390,
+		() => 780,
 		() => "BonusCoin",
 		() => "Default",
 		() => "Endgame",
