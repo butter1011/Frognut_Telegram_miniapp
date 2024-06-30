@@ -6182,11 +6182,10 @@ self.C3_GetObjectRefTable = function () {
 		C3.Behaviors.Tween.Cnds.IsPlaying,
 		C3.Plugins.Sprite.Acts.SetScale,
 		C3.Behaviors.Tween.Exps.Value,
+		C3.Plugins.Browser.Acts.GoToURL,
 		C3.Plugins.System.Acts.LoadState,
 		C3.Plugins.System.Acts.ResetGlobals,
 		C3.Plugins.LocalStorage.Acts.SetItem,
-		C3.Plugins.System.Exps.int,
-		C3.Plugins.Browser.Exps.QueryParam,
 		C3.Plugins.Json.Acts.Parse,
 		C3.Plugins.AJAX.Exps.LastData,
 		C3.Plugins.Json.Exps.Get
@@ -6783,6 +6782,7 @@ self.C3_ExpressionFuncs = [
 		() => "Initial Values",
 		() => -10,
 		() => "CombosMultiplier",
+		() => 0.075,
 		() => 99,
 		() => 15,
 		() => 89,
@@ -6825,6 +6825,11 @@ self.C3_ExpressionFuncs = [
 			return () => n0.ExpBehavior("questChestBtn");
 		},
 		() => "Endgame",
+		() => "Invite",
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => (and("https://t.me/share/url?url=https://t.me/frognutbot/gameapp?startapp=", v0.GetValue()) + "&text=%F0%9F%92%B0Catizen%3A%20Unleash%2C%20Play%2C%20Earn%20-%20Where%20Every%20Game%20Leads%20to%20an%20Airdrop%20Adventure!%0A%F0%9F%8E%81Let%27s%20play-to-earn%20airdrop%20right%20now!");
+		},
 		() => "GameCompletedCode",
 		() => "newgame",
 		() => "GLOBALBITCOINS",
@@ -6855,11 +6860,7 @@ self.C3_ExpressionFuncs = [
 		() => "B5BOOST",
 		() => "TUTORIAL",
 		() => "LoadGame2",
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			const f1 = p._GetNode(1).GetBoundMethod();
-			return () => f0(f1("user_id"));
-		},
+		() => 7069393465,
 		() => "FetchUserData",
 		() => "https://telegrambotgame-backend.vercel.app/api/v1/user",
 		p => {
