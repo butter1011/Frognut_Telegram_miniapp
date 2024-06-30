@@ -6186,6 +6186,8 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Acts.LoadState,
 		C3.Plugins.System.Acts.ResetGlobals,
 		C3.Plugins.LocalStorage.Acts.SetItem,
+		C3.Plugins.System.Exps.int,
+		C3.Plugins.Browser.Exps.QueryParam,
 		C3.Plugins.Json.Acts.Parse,
 		C3.Plugins.AJAX.Exps.LastData,
 		C3.Plugins.Json.Exps.Get
@@ -6860,7 +6862,11 @@ self.C3_ExpressionFuncs = [
 		() => "B5BOOST",
 		() => "TUTORIAL",
 		() => "LoadGame2",
-		() => 7069393465,
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const f1 = p._GetNode(1).GetBoundMethod();
+			return () => f0(f1("user_id"));
+		},
 		() => "FetchUserData",
 		() => "https://telegrambotgame-backend.vercel.app/api/v1/user",
 		p => {
