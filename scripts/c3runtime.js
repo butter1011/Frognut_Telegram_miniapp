@@ -6351,6 +6351,9 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Sprite.Exps.Y,
 		C3.Plugins.Sprite.Acts.SetHeight,
 		C3.Plugins.System.Exps.dt,
+		C3.Plugins.System.Cnds.CompareVar,
+		C3.Plugins.Text.Acts.SetText,
+		C3.Plugins.System.Cnds.Else,
 		C3.Plugins.Sprite.Acts.SetX,
 		C3.Plugins.Sprite.Cnds.CompareY,
 		C3.Behaviors.DragnDrop.Acts.SetEnabled,
@@ -6362,7 +6365,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Sprite.Acts.Destroy,
 		C3.Plugins.Sprite.Cnds.OnCreated,
 		C3.Plugins.Sprite.Acts.MoveToBottom,
-		C3.Plugins.System.Cnds.CompareVar,
 		C3.Plugins.Sprite.Acts.SetOpacity,
 		C3.Plugins.Spritefont2.Acts.SetOpacity,
 		C3.Plugins.System.Acts.SubVar,
@@ -6372,10 +6374,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Cnds.TriggerOnce,
 		C3.Plugins.System.Acts.SetBoolVar,
 		C3.Plugins.Audio.Acts.FadeVolume,
-		C3.Plugins.Sprite.Acts.SetVisible,
-		C3.ScriptsInEvents.Gamecode_Event60_Act31,
-		C3.Plugins.Audio.Acts.SetVolume,
-		C3.ScriptsInEvents.Gamecode_Event61_Act31,
+		C3.ScriptsInEvents.Gamecode_Event70_Act31,
 		C3.Plugins.AJAX.Cnds.OnComplete,
 		C3.Behaviors.Flash.Acts.Flash,
 		C3.Plugins.Audio.Acts.StopAll,
@@ -6383,6 +6382,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Acts.ToggleBoolVar,
 		C3.Plugins.Audio.Acts.SetMasterVolume,
 		C3.Plugins.System.Cnds.OnLayoutStart,
+		C3.Plugins.Sprite.Acts.StopAnim,
 		C3.Plugins.Sprite.Cnds.OnAnimFinished,
 		C3.Plugins.Touch.Cnds.OnTapGestureObject,
 		C3.Plugins.System.Acts.SetLayerVisible,
@@ -6436,7 +6436,7 @@ self.C3_JsPropNameTable = [
 	{GameplayCloudBackground: 0},
 	{LightEffect2: 0},
 	{MainScoreUI: 0},
-	{MainText: 0},
+	{MainTextTest: 0},
 	{MultiplierBackground: 0},
 	{MultiplierLines: 0},
 	{Progressbar: 0},
@@ -6532,6 +6532,7 @@ self.C3_JsPropNameTable = [
 	{Browser: 0},
 	{JSON: 0},
 	{Copyclip: 0},
+	{MainText: 0},
 	{GlobalBitcoins: 0},
 	{ClickValueBitcoin: 0},
 	{ClickSeconds: 0},
@@ -6603,7 +6604,7 @@ self.InstanceType = {
 	GameplayCloudBackground: class extends self.ISpriteInstance {},
 	LightEffect2: class extends self.ISpriteInstance {},
 	MainScoreUI: class extends self.ISpriteInstance {},
-	MainText: class extends self.ISpriteFontInstance {},
+	MainTextTest: class extends self.ISpriteFontInstance {},
 	MultiplierBackground: class extends self.ISpriteInstance {},
 	MultiplierLines: class extends self.ISpriteInstance {},
 	Progressbar: class extends self.ISpriteInstance {},
@@ -6693,7 +6694,8 @@ self.InstanceType = {
 	AJAX: class extends self.IInstance {},
 	Browser: class extends self.IInstance {},
 	JSON: class extends self.IJSONInstance {},
-	Copyclip: class extends self.IInstance {}
+	Copyclip: class extends self.IInstance {},
+	MainText: class extends self.ITextInstance {}
 }
 }
 
@@ -6880,15 +6882,15 @@ self.C3_ExpressionFuncs = [
 		},
 		p => {
 			const v0 = p._GetNode(0).GetVar();
-			return () => Math.round(v0.GetValue());
-		},
-		p => {
-			const v0 = p._GetNode(0).GetVar();
 			const v1 = p._GetNode(1).GetVar();
 			const v2 = p._GetNode(2).GetVar();
 			const v3 = p._GetNode(3).GetVar();
 			const v4 = p._GetNode(4).GetVar();
 			return () => (((((v0.GetValue() + v1.GetValue()) + v2.GetValue()) + v3.GetValue()) + v4.GetValue()) / 2);
+		},
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => Math.round(v0.GetValue());
 		},
 		p => {
 			const n0 = p._GetNode(0);
@@ -6907,6 +6909,21 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			const f1 = p._GetNode(1).GetBoundMethod();
 			return () => (n0.ExpObject() - (240 * f1()));
+		},
+		() => 1000000000000,
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => and((Math.round((v0.GetValue() / 10000000000)) / 100), "T");
+		},
+		() => 1000000000,
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => and((Math.round((v0.GetValue() / 10000000)) / 100), "B");
+		},
+		() => 1000000,
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => and((Math.round((v0.GetValue() / 10000)) / 100), "M");
 		},
 		p => {
 			const v0 = p._GetNode(0).GetVar();
@@ -6984,9 +7001,8 @@ self.C3_ExpressionFuncs = [
 			const v0 = p._GetNode(0).GetVar();
 			return () => (v0.GetValue() * 0.5);
 		},
+		() => 75,
 		() => "Save Game",
-		() => "BStop",
-		() => 50,
 		() => 0.1,
 		() => "Sound",
 		() => "speakeroff",
