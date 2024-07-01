@@ -4744,6 +4744,215 @@ CurrentType(){return this._JSONTypeOf(this._currentValue)}}};
 }
 
 {
+"use strict";
+{
+    const C3 = self.C3;
+    C3.Plugins.Sparsha_copyclip = class copyclipPlugin extends C3.SDKPluginBase
+    {
+        constructor(opts)
+        {
+            super(opts);
+        }
+
+        Release()
+        {
+            super.Release();
+        }
+    };
+}
+}
+
+{
+"use strict";
+{
+    const C3 = self.C3;
+    C3.Plugins.Sparsha_copyclip.Type = class copyclipType extends C3.SDKTypeBase
+    {
+        constructor(objectClass)
+        {
+            super(objectClass);
+        }
+
+        Release()
+        {
+            super.Release();
+        }
+
+        OnCreate()
+        {}
+    };
+}
+}
+
+{
+"use strict";
+{
+    const C3 = self.C3;
+    C3.Plugins.Sparsha_copyclip.Instance = class copyclipInstance extends C3.SDKInstanceBase
+    {
+        constructor(inst, properties)
+        {
+            super(inst);
+            if (properties)
+            {}
+            //var textToCopy = "";
+            //if (typeof document != "undefined") var Input = document.createElement("input");
+
+            this.errorClipboard = null;
+            this.GetText = "";
+            this.Input = null;
+
+            this.CDNS = C3.Plugins.Sparsha_copyclip.Cnds;
+        }
+
+        Release()
+        {
+            super.Release();
+        }
+
+        SaveToJson()
+        {
+            return {
+                // data to be saved for savegames
+            };
+        }
+
+        LoadFromJson(o)
+        {
+            // load state for savegames
+        }
+
+        GetDebuggerProperties()
+        {
+            return [
+            {
+                title: "copyclip",
+                properties: [
+                    //{name: ".current-animation",	value: this._currentAnimation.GetName(),	onedit: v => this.CallAction(Acts.SetAnim, v, 0) },
+                ]
+            }];
+        }
+    };
+}
+}
+
+{
+"use strict";
+{
+    self.C3.Plugins.Sparsha_copyclip.Cnds = {
+        OnCopy()
+        {
+            return true;
+        },
+
+        OnGet()
+        {
+            return true;
+        },
+
+        OnCopyError()
+        {
+            return true;
+        },
+
+        OnGetError()
+        {
+            return true;
+        },
+
+        OnCopy1()
+        {
+            return true;
+        }
+    };
+}
+}
+
+{
+"use strict";
+{
+    self.C3.Plugins.Sparsha_copyclip.Acts = {
+        Copy(Text)
+        {
+            var self = this;
+            self.Input = document.createElement("input");
+            self.Input.value = Text;
+            document.getElementsByTagName('body')[0].appendChild(self.Input);
+        },
+
+        async ApiCopy(Text)
+        {
+            var self = this;
+            window.focus();
+            await navigator.clipboard.writeText(Text)
+                .then(() => {
+                self.Trigger(self.CDNS.OnCopy);
+            }).
+            catch (err => {
+                self.errorClipboard = err.message;
+                self.Trigger(self.CDNS.OnCopyError);
+            });
+        },
+
+        async ApiGet()
+        {
+            var self = this;
+            window.focus();
+            await navigator.clipboard.readText()
+                .then(Text => {
+                self.GetText = Text;
+                self.Trigger(self.CDNS.OnGet);
+            }).
+            catch (err => {
+                self.errorClipboard = err.message;
+                self.Trigger(self.CDNS.OnGetError);
+            });
+        },
+
+        ClearError()
+        {
+            this.errorClipboard = "";
+            //onErrorCopy = 0;
+            //onErrorGet = 0;
+        },
+
+        InitCopy(buttonId)
+        {
+            var self = this;
+            document.getElementById(buttonId).onclick = function()
+            {
+                setTimeout(function()
+                {
+                    self.Input.select();
+                    document.execCommand("copy");
+                    self.Input.remove();
+                    self.Trigger(self.CDNS.OnCopy1);
+                }, 50);
+            };
+
+        }
+    };
+}
+}
+
+{
+"use strict";
+{
+    self.C3.Plugins.Sparsha_copyclip.Exps = {
+        clipboardData()
+        {
+            return this.GetText;
+        },
+
+        error()
+        {
+            return this.errorClipboard;
+        }
+    };
+}
+}
+
+{
 'use strict';{const C3=self.C3;C3.Behaviors.Flash=class FlashBehavior extends C3.SDKBehaviorBase{constructor(opts){super(opts)}Release(){super.Release()}}}{const C3=self.C3;C3.Behaviors.Flash.Type=class FlashType extends C3.SDKBehaviorTypeBase{constructor(behaviorType){super(behaviorType)}Release(){super.Release()}OnCreate(){}}}
 {const C3=self.C3;const C3X=self.C3X;const IBehaviorInstance=self.IBehaviorInstance;C3.Behaviors.Flash.Instance=class FlashInstance extends C3.SDKBehaviorInstanceBase{constructor(behInst,properties){super(behInst);this._onTime=0;this._offTime=0;this._stage=0;this._stageTimeLeft=0;this._timeLeft=0;this._StartTicking()}Release(){super.Release()}_Flash(on,off,dur){this._onTime=on;this._offTime=off;this._stage=1;this._stageTimeLeft=off;this._timeLeft=dur;this._inst.GetWorldInfo().SetVisible(false);this._runtime.UpdateRender()}_StopFlashing(){this._timeLeft=
 0;this._inst.GetWorldInfo().SetVisible(true);this._runtime.UpdateRender()}_IsFlashing(){return this._timeLeft>0}SaveToJson(){return{"on":this._onTime,"off":this._offTime,"s":this._stage,"stl":this._stageTimeLeft,"tl":this._timeLeft}}LoadFromJson(o){this._onTime=o["on"];this._offTime=o["off"];this._stage=o["s"];this._stageTimeLeft=o["stl"];this._timeLeft=o["tl"]===null?Infinity:o["tl"]}Tick(){if(this._timeLeft<=0)return;const dt=this._runtime.GetDt(this._inst);this._timeLeft-=dt;if(this._timeLeft<=
@@ -6045,29 +6254,6 @@ opts.tags,opts.startValue,endValue,time,easeIndex,!!opts.destroyOnComplete,!!opt
 }
 
 {
-'use strict';{const C3=self.C3;C3.Behaviors.Pin=class PinBehavior extends C3.SDKBehaviorBase{constructor(opts){super(opts)}Release(){super.Release()}}}{const C3=self.C3;C3.Behaviors.Pin.Type=class PinType extends C3.SDKBehaviorTypeBase{constructor(behaviorType){super(behaviorType)}Release(){super.Release()}OnCreate(){}}}
-{const C3=self.C3;C3.Behaviors.Pin.Instance=class PinInstance extends C3.SDKBehaviorInstanceBase{constructor(behInst,properties){super(behInst);this._pinInst=null;this._pinUid=-1;this._mode="";this._propSet=new Set;this._pinDist=0;this._pinAngle=0;this._pinImagePoint=0;this._dx=0;this._dy=0;this._dWidth=0;this._dHeight=0;this._dAngle=0;this._dz=0;this._lastKnownAngle=0;this._destroy=false;if(properties)this._destroy=properties[0];const rt=this._runtime.Dispatcher();this._disposables=new C3.CompositeDisposable(C3.Disposable.From(rt,
-"instancedestroy",e=>this._OnInstanceDestroyed(e.instance)),C3.Disposable.From(rt,"afterload",e=>this._OnAfterLoad()))}Release(){this._pinInst=null;super.Release()}_SetPinInst(inst){if(inst){this._pinInst=inst;this._StartTicking2()}else{this._pinInst=null;this._StopTicking2()}}_Pin(objectClass,mode,propList){if(!objectClass)return;const otherInst=objectClass.GetFirstPicked(this._inst);if(!otherInst)return;this._mode=mode;this._SetPinInst(otherInst);const myWi=this._inst.GetWorldInfo();const otherWi=
-otherInst.GetWorldInfo();if(this._mode==="properties"){const propSet=this._propSet;propSet.clear();for(const p of propList)propSet.add(p);this._dx=myWi.GetX()-otherWi.GetX();this._dy=myWi.GetY()-otherWi.GetY();this._dAngle=myWi.GetAngle()-otherWi.GetAngle();this._lastKnownAngle=myWi.GetAngle();this._dz=myWi.GetZElevation()-otherWi.GetZElevation();if(propSet.has("x")&&propSet.has("y")){this._pinAngle=C3.angleTo(otherWi.GetX(),otherWi.GetY(),myWi.GetX(),myWi.GetY())-otherWi.GetAngle();this._pinDist=
-C3.distanceTo(otherWi.GetX(),otherWi.GetY(),myWi.GetX(),myWi.GetY())}if(propSet.has("width-abs"))this._dWidth=myWi.GetWidth()-otherWi.GetWidth();else if(propSet.has("width-scale"))this._dWidth=myWi.GetWidth()/otherWi.GetWidth();if(propSet.has("height-abs"))this._dHeight=myWi.GetHeight()-otherWi.GetHeight();else if(propSet.has("height-scale"))this._dHeight=myWi.GetHeight()/otherWi.GetHeight()}else this._pinDist=C3.distanceTo(otherWi.GetX(),otherWi.GetY(),myWi.GetX(),myWi.GetY())}SaveToJson(){const propSet=
-this._propSet;const mode=this._mode;const ret={"uid":this._pinInst&&!this._pinInst.IsDestroyed()?this._pinInst.GetUID():-1,"m":mode,"d":this._destroy};if(mode==="rope"||mode==="bar")ret["pd"]=this._pinDist;else if(mode==="properties"){ret["ps"]=[...this._propSet];if(propSet.has("imagepoint"))ret["ip"]=this._pinImagePoint;else if(propSet.has("x")&&propSet.has("y")){ret["pa"]=this._pinAngle;ret["pd"]=this._pinDist}else{if(propSet.has("x"))ret["dx"]=this._dx;if(propSet.has("y"))ret["dy"]=this._dy}if(propSet.has("angle")){ret["da"]=
-this._dAngle;ret["lka"]=this._lastKnownAngle}if(propSet.has("width-abs")||propSet.has("width-scale"))ret["dw"]=this._dWidth;if(propSet.has("height-abs")||propSet.has("height-scale"))ret["dh"]=this._dHeight;if(propSet.has("z"))ret["dz"]=this._dz}return ret}LoadFromJson(o){const mode=o["m"];const propSet=this._propSet;propSet.clear();this._pinUid=o["uid"];if(typeof mode==="number"){this._LoadFromJson_Legacy(o);return}this._mode=mode;if(o.hasOwnProperty("d"))this._destroy=!!o["d"];if(mode==="rope"||
-mode==="bar")this._pinDist=o["pd"];else if(mode==="properties"){for(const p of o["ps"])propSet.add(p);if(propSet.has("imagepoint"))this._pinImagePoint=o["ip"];else if(propSet.has("x")&&propSet.has("y")){this._pinAngle=o["pa"];this._pinDist=o["pd"]}else{if(propSet.has("x"))this._dx=o["dx"];if(propSet.has("y"))this._dy=o["dy"]}if(propSet.has("angle")){this._dAngle=o["da"];this._lastKnownAngle=o["lka"]||0}if(propSet.has("width-abs")||propSet.has("width-scale"))this._dWidth=o["dw"];if(propSet.has("height-abs")||
-propSet.has("height-scale"))this._dHeight=o["dh"];if(propSet.has("z"))this._dz=o["dz"]}}_LoadFromJson_Legacy(o){const propSet=this._propSet;const myStartAngle=o["msa"];const theirStartAngle=o["tsa"];const pinAngle=o["pa"];const pinDist=o["pd"];const mode=o["m"];switch(mode){case 0:this._mode="properties";propSet.add("x").add("y").add("angle");this._pinAngle=pinAngle;this._pinDist=pinDist;this._dAngle=myStartAngle-theirStartAngle;this._lastKnownAngle=o["lka"];break;case 1:this._mode="properties";propSet.add("x").add("y");
-this._pinAngle=pinAngle;this._pinDist=pinDist;break;case 2:this._mode="properties";propSet.add("angle");this._dAngle=myStartAngle-theirStartAngle;this._lastKnownAngle=o["lka"];break;case 3:this._mode="rope";this._pinDist=o["pd"];break;case 4:this._mode="bar";this._pinDist=o["pd"];break}}_OnAfterLoad(){if(this._pinUid===-1)this._SetPinInst(null);else{this._SetPinInst(this._runtime.GetInstanceByUID(this._pinUid));this._pinUid=-1}}_OnInstanceDestroyed(inst){if(this._pinInst===inst){this._SetPinInst(null);
-if(this._destroy)this._runtime.DestroyInstance(this._inst)}}Tick2(){const pinInst=this._pinInst;if(!pinInst||pinInst.IsDestroyed())return;const pinWi=pinInst.GetWorldInfo();const myInst=this._inst;const myWi=myInst.GetWorldInfo();const mode=this._mode;let bboxChanged=false;if(mode==="rope"||mode==="bar"){const dist=C3.distanceTo(myWi.GetX(),myWi.GetY(),pinWi.GetX(),pinWi.GetY());if(dist>this._pinDist||mode==="bar"&&dist<this._pinDist){const a=C3.angleTo(pinWi.GetX(),pinWi.GetY(),myWi.GetX(),myWi.GetY());
-myWi.SetXY(pinWi.GetX()+Math.cos(a)*this._pinDist,pinWi.GetY()+Math.sin(a)*this._pinDist);bboxChanged=true}}else{const propSet=this._propSet;let v=0;if(propSet.has("imagepoint")){const [newX,newY]=pinInst.GetImagePoint(this._pinImagePoint);if(!myWi.EqualsXY(newX,newY)){myWi.SetXY(newX,newY);bboxChanged=true}}else if(propSet.has("x")&&propSet.has("y")){const newX=pinWi.GetX()+Math.cos(pinWi.GetAngle()+this._pinAngle)*this._pinDist;const newY=pinWi.GetY()+Math.sin(pinWi.GetAngle()+this._pinAngle)*this._pinDist;
-if(!myWi.EqualsXY(newX,newY)){myWi.SetXY(newX,newY);bboxChanged=true}}else{v=pinWi.GetX()+this._dx;if(propSet.has("x")&&v!==myWi.GetX()){myWi.SetX(v);bboxChanged=true}v=pinWi.GetY()+this._dy;if(propSet.has("y")&&v!==myWi.GetY()){myWi.SetY(v);bboxChanged=true}}if(propSet.has("angle")){if(this._lastKnownAngle!==myWi.GetAngle())this._dAngle=C3.clampAngle(this._dAngle+(myWi.GetAngle()-this._lastKnownAngle));v=C3.clampAngle(pinWi.GetAngle()+this._dAngle);if(v!==myWi.GetAngle()){myWi.SetAngle(v);bboxChanged=
-true}this._lastKnownAngle=myWi.GetAngle()}if(propSet.has("width-abs")){v=pinWi.GetWidth()+this._dWidth;if(v!==myWi.GetWidth()){myWi.SetWidth(v);bboxChanged=true}}if(propSet.has("width-scale")){v=pinWi.GetWidth()*this._dWidth;if(v!==myWi.GetWidth()){myWi.SetWidth(v);bboxChanged=true}}if(propSet.has("height-abs")){v=pinWi.GetHeight()+this._dHeight;if(v!==myWi.GetHeight()){myWi.SetHeight(v);bboxChanged=true}}if(propSet.has("height-scale")){v=pinWi.GetHeight()*this._dHeight;if(v!==myWi.GetHeight()){myWi.SetHeight(v);
-bboxChanged=true}}if(propSet.has("z")){v=pinWi.GetZElevation()+this._dz;if(v!==myWi.GetZElevation()){myWi.SetZElevation(v);this._runtime.UpdateRender()}}}if(bboxChanged)myWi.SetBboxChanged()}GetDebuggerProperties(){const prefix="behaviors.pin.debugger";return[{title:"$"+this.GetBehaviorType().GetName(),properties:[{name:prefix+".is-pinned",value:!!this._pinInst},{name:prefix+".pinned-uid",value:this._pinInst?this._pinInst.GetUID():0}]}]}}}
-{const C3=self.C3;C3.Behaviors.Pin.Cnds={IsPinned(){return!!this._pinInst},WillDestroy(){return this._destroy}}}
-{const C3=self.C3;C3.Behaviors.Pin.Acts={PinByDistance(objectClass,mode){this._Pin(objectClass,mode===0?"rope":"bar")},PinByProperties(objectClass,ex,ey,ea,ew,eh,ez){const propList=[];if(ex)propList.push("x");if(ey)propList.push("y");if(ea)propList.push("angle");if(ez)propList.push("z");if(ew===1)propList.push("width-abs");else if(ew===2)propList.push("width-scale");if(eh===1)propList.push("height-abs");else if(eh===2)propList.push("height-scale");if(propList.length===0)return;this._Pin(objectClass,
-"properties",propList)},PinByImagePoint(objectClass,imgPt,ea,ew,eh,ez){const propList=["imagepoint"];if(ea)propList.push("angle");if(ez)propList.push("z");if(ew===1)propList.push("width-abs");else if(ew===2)propList.push("width-scale");if(eh===1)propList.push("height-abs");else if(eh===2)propList.push("height-scale");this._pinImagePoint=imgPt;this._Pin(objectClass,"properties",propList)},SetPinDistance(d){if(this._mode==="rope"||this._mode==="bar")this._pinDist=Math.max(d,0)},SetDestroy(d){this._destroy=
-d},Unpin(){this._SetPinInst(null);this._mode="";this._propSet.clear();this._pinImagePoint=""},Pin(objectClass,mode){switch(mode){case 0:this._Pin(objectClass,"properties",["x","y","angle"]);break;case 1:this._Pin(objectClass,"properties",["x","y"]);break;case 2:this._Pin(objectClass,"properties",["angle"]);break;case 3:this._Pin(objectClass,"rope");break;case 4:this._Pin(objectClass,"bar");break}}}}{const C3=self.C3;C3.Behaviors.Pin.Exps={PinnedUID(){return this._pinInst?this._pinInst.GetUID():-1}}};
-
-}
-
-{
 'use strict';{const C3=self.C3;C3.Behaviors.destroy=class DestroyOutsideLayoutBehavior extends C3.SDKBehaviorBase{constructor(opts){super(opts)}Release(){super.Release()}}}{const C3=self.C3;C3.Behaviors.destroy.Type=class DestroyOutsideLayoutType extends C3.SDKBehaviorTypeBase{constructor(behaviorType){super(behaviorType)}Release(){super.Release()}OnCreate(){}}}
 {const C3=self.C3;C3.Behaviors.destroy.Instance=class DestroyOutsideLayoutInstance extends C3.SDKBehaviorInstanceBase{constructor(behInst,properties){super(behInst);this._StartTicking()}Release(){super.Release()}Tick(){const wi=this._inst.GetWorldInfo();const bbox=wi.GetBoundingBox();const layout=wi.GetLayout();if(bbox.getRight()<0||bbox.getBottom()<0||bbox.getLeft()>layout.GetWidth()||bbox.getTop()>layout.GetHeight())this._runtime.DestroyInstance(this._inst)}}}
 {const C3=self.C3;C3.Behaviors.destroy.Cnds={}}{const C3=self.C3;C3.Behaviors.destroy.Acts={}}{const C3=self.C3;C3.Behaviors.destroy.Exps={}};
@@ -6092,6 +6278,29 @@ VALID_AXES.indexOf(str);if(a===-1)throw new Error("invalid axes");map.get(this).
 }
 
 {
+'use strict';{const C3=self.C3;C3.Behaviors.Pin=class PinBehavior extends C3.SDKBehaviorBase{constructor(opts){super(opts)}Release(){super.Release()}}}{const C3=self.C3;C3.Behaviors.Pin.Type=class PinType extends C3.SDKBehaviorTypeBase{constructor(behaviorType){super(behaviorType)}Release(){super.Release()}OnCreate(){}}}
+{const C3=self.C3;C3.Behaviors.Pin.Instance=class PinInstance extends C3.SDKBehaviorInstanceBase{constructor(behInst,properties){super(behInst);this._pinInst=null;this._pinUid=-1;this._mode="";this._propSet=new Set;this._pinDist=0;this._pinAngle=0;this._pinImagePoint=0;this._dx=0;this._dy=0;this._dWidth=0;this._dHeight=0;this._dAngle=0;this._dz=0;this._lastKnownAngle=0;this._destroy=false;if(properties)this._destroy=properties[0];const rt=this._runtime.Dispatcher();this._disposables=new C3.CompositeDisposable(C3.Disposable.From(rt,
+"instancedestroy",e=>this._OnInstanceDestroyed(e.instance)),C3.Disposable.From(rt,"afterload",e=>this._OnAfterLoad()))}Release(){this._pinInst=null;super.Release()}_SetPinInst(inst){if(inst){this._pinInst=inst;this._StartTicking2()}else{this._pinInst=null;this._StopTicking2()}}_Pin(objectClass,mode,propList){if(!objectClass)return;const otherInst=objectClass.GetFirstPicked(this._inst);if(!otherInst)return;this._mode=mode;this._SetPinInst(otherInst);const myWi=this._inst.GetWorldInfo();const otherWi=
+otherInst.GetWorldInfo();if(this._mode==="properties"){const propSet=this._propSet;propSet.clear();for(const p of propList)propSet.add(p);this._dx=myWi.GetX()-otherWi.GetX();this._dy=myWi.GetY()-otherWi.GetY();this._dAngle=myWi.GetAngle()-otherWi.GetAngle();this._lastKnownAngle=myWi.GetAngle();this._dz=myWi.GetZElevation()-otherWi.GetZElevation();if(propSet.has("x")&&propSet.has("y")){this._pinAngle=C3.angleTo(otherWi.GetX(),otherWi.GetY(),myWi.GetX(),myWi.GetY())-otherWi.GetAngle();this._pinDist=
+C3.distanceTo(otherWi.GetX(),otherWi.GetY(),myWi.GetX(),myWi.GetY())}if(propSet.has("width-abs"))this._dWidth=myWi.GetWidth()-otherWi.GetWidth();else if(propSet.has("width-scale"))this._dWidth=myWi.GetWidth()/otherWi.GetWidth();if(propSet.has("height-abs"))this._dHeight=myWi.GetHeight()-otherWi.GetHeight();else if(propSet.has("height-scale"))this._dHeight=myWi.GetHeight()/otherWi.GetHeight()}else this._pinDist=C3.distanceTo(otherWi.GetX(),otherWi.GetY(),myWi.GetX(),myWi.GetY())}SaveToJson(){const propSet=
+this._propSet;const mode=this._mode;const ret={"uid":this._pinInst&&!this._pinInst.IsDestroyed()?this._pinInst.GetUID():-1,"m":mode,"d":this._destroy};if(mode==="rope"||mode==="bar")ret["pd"]=this._pinDist;else if(mode==="properties"){ret["ps"]=[...this._propSet];if(propSet.has("imagepoint"))ret["ip"]=this._pinImagePoint;else if(propSet.has("x")&&propSet.has("y")){ret["pa"]=this._pinAngle;ret["pd"]=this._pinDist}else{if(propSet.has("x"))ret["dx"]=this._dx;if(propSet.has("y"))ret["dy"]=this._dy}if(propSet.has("angle")){ret["da"]=
+this._dAngle;ret["lka"]=this._lastKnownAngle}if(propSet.has("width-abs")||propSet.has("width-scale"))ret["dw"]=this._dWidth;if(propSet.has("height-abs")||propSet.has("height-scale"))ret["dh"]=this._dHeight;if(propSet.has("z"))ret["dz"]=this._dz}return ret}LoadFromJson(o){const mode=o["m"];const propSet=this._propSet;propSet.clear();this._pinUid=o["uid"];if(typeof mode==="number"){this._LoadFromJson_Legacy(o);return}this._mode=mode;if(o.hasOwnProperty("d"))this._destroy=!!o["d"];if(mode==="rope"||
+mode==="bar")this._pinDist=o["pd"];else if(mode==="properties"){for(const p of o["ps"])propSet.add(p);if(propSet.has("imagepoint"))this._pinImagePoint=o["ip"];else if(propSet.has("x")&&propSet.has("y")){this._pinAngle=o["pa"];this._pinDist=o["pd"]}else{if(propSet.has("x"))this._dx=o["dx"];if(propSet.has("y"))this._dy=o["dy"]}if(propSet.has("angle")){this._dAngle=o["da"];this._lastKnownAngle=o["lka"]||0}if(propSet.has("width-abs")||propSet.has("width-scale"))this._dWidth=o["dw"];if(propSet.has("height-abs")||
+propSet.has("height-scale"))this._dHeight=o["dh"];if(propSet.has("z"))this._dz=o["dz"]}}_LoadFromJson_Legacy(o){const propSet=this._propSet;const myStartAngle=o["msa"];const theirStartAngle=o["tsa"];const pinAngle=o["pa"];const pinDist=o["pd"];const mode=o["m"];switch(mode){case 0:this._mode="properties";propSet.add("x").add("y").add("angle");this._pinAngle=pinAngle;this._pinDist=pinDist;this._dAngle=myStartAngle-theirStartAngle;this._lastKnownAngle=o["lka"];break;case 1:this._mode="properties";propSet.add("x").add("y");
+this._pinAngle=pinAngle;this._pinDist=pinDist;break;case 2:this._mode="properties";propSet.add("angle");this._dAngle=myStartAngle-theirStartAngle;this._lastKnownAngle=o["lka"];break;case 3:this._mode="rope";this._pinDist=o["pd"];break;case 4:this._mode="bar";this._pinDist=o["pd"];break}}_OnAfterLoad(){if(this._pinUid===-1)this._SetPinInst(null);else{this._SetPinInst(this._runtime.GetInstanceByUID(this._pinUid));this._pinUid=-1}}_OnInstanceDestroyed(inst){if(this._pinInst===inst){this._SetPinInst(null);
+if(this._destroy)this._runtime.DestroyInstance(this._inst)}}Tick2(){const pinInst=this._pinInst;if(!pinInst||pinInst.IsDestroyed())return;const pinWi=pinInst.GetWorldInfo();const myInst=this._inst;const myWi=myInst.GetWorldInfo();const mode=this._mode;let bboxChanged=false;if(mode==="rope"||mode==="bar"){const dist=C3.distanceTo(myWi.GetX(),myWi.GetY(),pinWi.GetX(),pinWi.GetY());if(dist>this._pinDist||mode==="bar"&&dist<this._pinDist){const a=C3.angleTo(pinWi.GetX(),pinWi.GetY(),myWi.GetX(),myWi.GetY());
+myWi.SetXY(pinWi.GetX()+Math.cos(a)*this._pinDist,pinWi.GetY()+Math.sin(a)*this._pinDist);bboxChanged=true}}else{const propSet=this._propSet;let v=0;if(propSet.has("imagepoint")){const [newX,newY]=pinInst.GetImagePoint(this._pinImagePoint);if(!myWi.EqualsXY(newX,newY)){myWi.SetXY(newX,newY);bboxChanged=true}}else if(propSet.has("x")&&propSet.has("y")){const newX=pinWi.GetX()+Math.cos(pinWi.GetAngle()+this._pinAngle)*this._pinDist;const newY=pinWi.GetY()+Math.sin(pinWi.GetAngle()+this._pinAngle)*this._pinDist;
+if(!myWi.EqualsXY(newX,newY)){myWi.SetXY(newX,newY);bboxChanged=true}}else{v=pinWi.GetX()+this._dx;if(propSet.has("x")&&v!==myWi.GetX()){myWi.SetX(v);bboxChanged=true}v=pinWi.GetY()+this._dy;if(propSet.has("y")&&v!==myWi.GetY()){myWi.SetY(v);bboxChanged=true}}if(propSet.has("angle")){if(this._lastKnownAngle!==myWi.GetAngle())this._dAngle=C3.clampAngle(this._dAngle+(myWi.GetAngle()-this._lastKnownAngle));v=C3.clampAngle(pinWi.GetAngle()+this._dAngle);if(v!==myWi.GetAngle()){myWi.SetAngle(v);bboxChanged=
+true}this._lastKnownAngle=myWi.GetAngle()}if(propSet.has("width-abs")){v=pinWi.GetWidth()+this._dWidth;if(v!==myWi.GetWidth()){myWi.SetWidth(v);bboxChanged=true}}if(propSet.has("width-scale")){v=pinWi.GetWidth()*this._dWidth;if(v!==myWi.GetWidth()){myWi.SetWidth(v);bboxChanged=true}}if(propSet.has("height-abs")){v=pinWi.GetHeight()+this._dHeight;if(v!==myWi.GetHeight()){myWi.SetHeight(v);bboxChanged=true}}if(propSet.has("height-scale")){v=pinWi.GetHeight()*this._dHeight;if(v!==myWi.GetHeight()){myWi.SetHeight(v);
+bboxChanged=true}}if(propSet.has("z")){v=pinWi.GetZElevation()+this._dz;if(v!==myWi.GetZElevation()){myWi.SetZElevation(v);this._runtime.UpdateRender()}}}if(bboxChanged)myWi.SetBboxChanged()}GetDebuggerProperties(){const prefix="behaviors.pin.debugger";return[{title:"$"+this.GetBehaviorType().GetName(),properties:[{name:prefix+".is-pinned",value:!!this._pinInst},{name:prefix+".pinned-uid",value:this._pinInst?this._pinInst.GetUID():0}]}]}}}
+{const C3=self.C3;C3.Behaviors.Pin.Cnds={IsPinned(){return!!this._pinInst},WillDestroy(){return this._destroy}}}
+{const C3=self.C3;C3.Behaviors.Pin.Acts={PinByDistance(objectClass,mode){this._Pin(objectClass,mode===0?"rope":"bar")},PinByProperties(objectClass,ex,ey,ea,ew,eh,ez){const propList=[];if(ex)propList.push("x");if(ey)propList.push("y");if(ea)propList.push("angle");if(ez)propList.push("z");if(ew===1)propList.push("width-abs");else if(ew===2)propList.push("width-scale");if(eh===1)propList.push("height-abs");else if(eh===2)propList.push("height-scale");if(propList.length===0)return;this._Pin(objectClass,
+"properties",propList)},PinByImagePoint(objectClass,imgPt,ea,ew,eh,ez){const propList=["imagepoint"];if(ea)propList.push("angle");if(ez)propList.push("z");if(ew===1)propList.push("width-abs");else if(ew===2)propList.push("width-scale");if(eh===1)propList.push("height-abs");else if(eh===2)propList.push("height-scale");this._pinImagePoint=imgPt;this._Pin(objectClass,"properties",propList)},SetPinDistance(d){if(this._mode==="rope"||this._mode==="bar")this._pinDist=Math.max(d,0)},SetDestroy(d){this._destroy=
+d},Unpin(){this._SetPinInst(null);this._mode="";this._propSet.clear();this._pinImagePoint=""},Pin(objectClass,mode){switch(mode){case 0:this._Pin(objectClass,"properties",["x","y","angle"]);break;case 1:this._Pin(objectClass,"properties",["x","y"]);break;case 2:this._Pin(objectClass,"properties",["angle"]);break;case 3:this._Pin(objectClass,"rope");break;case 4:this._Pin(objectClass,"bar");break}}}}{const C3=self.C3;C3.Behaviors.Pin.Exps={PinnedUID(){return this._pinInst?this._pinInst.GetUID():-1}}};
+
+}
+
+{
 const C3 = self.C3;
 self.C3_GetObjectRefTable = function () {
 	return [
@@ -6104,11 +6313,11 @@ self.C3_GetObjectRefTable = function () {
 		C3.Behaviors.Rotate,
 		C3.Plugins.Text,
 		C3.Behaviors.Tween,
-		C3.Behaviors.Pin,
-		C3.Plugins.Spritefont2,
 		C3.Behaviors.destroy,
+		C3.Plugins.Spritefont2,
 		C3.Behaviors.DragnDrop,
 		C3.Plugins.TiledBg,
+		C3.Behaviors.Pin,
 		C3.Plugins.Audio,
 		C3.Plugins.Keyboard,
 		C3.Plugins.Touch,
@@ -6116,6 +6325,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.AJAX,
 		C3.Plugins.Browser,
 		C3.Plugins.Json,
+		C3.Plugins.Sparsha_copyclip,
 		C3.Plugins.Json.Acts.SetValue,
 		C3.Plugins.AJAX.Acts.Post,
 		C3.Plugins.Json.Exps.ToCompactString,
@@ -6141,7 +6351,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Sprite.Exps.Y,
 		C3.Plugins.Sprite.Acts.SetHeight,
 		C3.Plugins.System.Exps.dt,
-		C3.Plugins.Sprite.Acts.SetWidth,
+		C3.Plugins.Sprite.Acts.SetX,
 		C3.Plugins.Sprite.Cnds.CompareY,
 		C3.Behaviors.DragnDrop.Acts.SetEnabled,
 		C3.Plugins.System.Acts.Wait,
@@ -6153,36 +6363,35 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Sprite.Cnds.OnCreated,
 		C3.Plugins.Sprite.Acts.MoveToBottom,
 		C3.Plugins.System.Cnds.CompareVar,
+		C3.Plugins.Sprite.Acts.SetOpacity,
+		C3.Plugins.Spritefont2.Acts.SetOpacity,
 		C3.Plugins.System.Acts.SubVar,
 		C3.Plugins.Audio.Acts.Play,
 		C3.Plugins.Spritefont2.Acts.Destroy,
 		C3.Plugins.System.Cnds.CompareBoolVar,
-		C3.Plugins.Sprite.Acts.SetDefaultColor,
-		C3.Plugins.Spritefont2.Acts.SetDefaultColor,
 		C3.Plugins.System.Cnds.TriggerOnce,
 		C3.Plugins.System.Acts.SetBoolVar,
-		C3.Behaviors.Tween.Acts.TweenValue,
 		C3.Plugins.Audio.Acts.FadeVolume,
 		C3.Plugins.Sprite.Acts.SetVisible,
 		C3.ScriptsInEvents.Gamecode_Event60_Act31,
 		C3.Plugins.Audio.Acts.SetVolume,
 		C3.ScriptsInEvents.Gamecode_Event61_Act31,
 		C3.Plugins.AJAX.Cnds.OnComplete,
-		C3.Plugins.Sprite.Acts.SetOpacity,
 		C3.Behaviors.Flash.Acts.Flash,
 		C3.Plugins.Audio.Acts.StopAll,
 		C3.Plugins.System.Acts.GoToLayout,
 		C3.Plugins.System.Acts.ToggleBoolVar,
 		C3.Plugins.Audio.Acts.SetMasterVolume,
 		C3.Plugins.System.Cnds.OnLayoutStart,
-		C3.Behaviors.Pin.Acts.PinByProperties,
 		C3.Plugins.Sprite.Cnds.OnAnimFinished,
 		C3.Plugins.Touch.Cnds.OnTapGestureObject,
 		C3.Plugins.System.Acts.SetLayerVisible,
+		C3.Behaviors.Tween.Acts.TweenValue,
 		C3.Behaviors.Tween.Cnds.IsPlaying,
 		C3.Plugins.Sprite.Acts.SetScale,
 		C3.Behaviors.Tween.Exps.Value,
 		C3.Plugins.Browser.Acts.GoToURL,
+		C3.Plugins.Sparsha_copyclip.Acts.ApiCopy,
 		C3.Plugins.System.Acts.LoadState,
 		C3.Plugins.System.Acts.ResetGlobals,
 		C3.Plugins.LocalStorage.Acts.SetItem,
@@ -6213,25 +6422,8 @@ self.C3_JsPropNameTable = [
 	{Loading_title: 0},
 	{Loading: 0},
 	{background_img: 0},
-	{Tween: 0},
-	{Pin: 0},
-	{B5Button: 0},
-	{Item5Level: 0},
-	{Item5Price: 0},
-	{B2Button: 0},
-	{Item2Level: 0},
-	{Item2Price: 0},
-	{Pin2: 0},
-	{B4Button: 0},
-	{Item4Level: 0},
-	{Item4Price: 0},
-	{B3Button: 0},
-	{Item3Level: 0},
-	{Item3Price: 0},
-	{B1Button: 0},
-	{Item1Level: 0},
-	{Item1Price: 0},
 	{MainBackground: 0},
+	{Tween: 0},
 	{MainPopsicle: 0},
 	{DestroyOutsideLayout: 0},
 	{MainBitcoinReward: 0},
@@ -6278,6 +6470,7 @@ self.C3_JsPropNameTable = [
 	{frognut: 0},
 	{alertRedBg: 0},
 	{TouchScreen: 0},
+	{ProgressLevel: 0},
 	{ButtonHomeGame: 0},
 	{ButtonSave: 0},
 	{ButtonSoundModify: 0},
@@ -6314,6 +6507,23 @@ self.C3_JsPropNameTable = [
 	{QuestChestStart: 0},
 	{QuestChestDone: 0},
 	{QuestScrollbar: 0},
+	{B1Button: 0},
+	{Pin: 0},
+	{Item1Level: 0},
+	{Item1Price: 0},
+	{B2Button: 0},
+	{Item2Level: 0},
+	{Item2Price: 0},
+	{B3Button: 0},
+	{Item3Level: 0},
+	{Item3Price: 0},
+	{Pin2: 0},
+	{B4Button: 0},
+	{Item4Level: 0},
+	{Item4Price: 0},
+	{B5Button: 0},
+	{Item5Level: 0},
+	{Item5Price: 0},
 	{Audio: 0},
 	{Keyboard: 0},
 	{Touch: 0},
@@ -6321,6 +6531,7 @@ self.C3_JsPropNameTable = [
 	{AJAX: 0},
 	{Browser: 0},
 	{JSON: 0},
+	{Copyclip: 0},
 	{GlobalBitcoins: 0},
 	{ClickValueBitcoin: 0},
 	{ClickSeconds: 0},
@@ -6380,21 +6591,6 @@ self.InstanceType = {
 	Loading_title: class extends self.ISpriteInstance {},
 	Loading: class extends self.ITextInstance {},
 	background_img: class extends self.ISpriteInstance {},
-	B5Button: class extends self.ISpriteInstance {},
-	Item5Level: class extends self.ISpriteFontInstance {},
-	Item5Price: class extends self.ISpriteFontInstance {},
-	B2Button: class extends self.ISpriteInstance {},
-	Item2Level: class extends self.ISpriteFontInstance {},
-	Item2Price: class extends self.ISpriteFontInstance {},
-	B4Button: class extends self.ISpriteInstance {},
-	Item4Level: class extends self.ISpriteFontInstance {},
-	Item4Price: class extends self.ISpriteFontInstance {},
-	B3Button: class extends self.ISpriteInstance {},
-	Item3Level: class extends self.ISpriteFontInstance {},
-	Item3Price: class extends self.ISpriteFontInstance {},
-	B1Button: class extends self.ISpriteInstance {},
-	Item1Level: class extends self.ISpriteFontInstance {},
-	Item1Price: class extends self.ISpriteFontInstance {},
 	MainBackground: class extends self.ISpriteInstance {},
 	MainPopsicle: class extends self.ISpriteInstance {},
 	MainBitcoinReward: class extends self.ISpriteInstance {},
@@ -6438,6 +6634,7 @@ self.InstanceType = {
 	frognut: class extends self.ISpriteInstance {},
 	alertRedBg: class extends self.ISpriteInstance {},
 	TouchScreen: class extends self.ISpriteInstance {},
+	ProgressLevel: class extends self.ISpriteInstance {},
 	ButtonHomeGame: class extends self.ISpriteInstance {},
 	ButtonSave: class extends self.ISpriteInstance {},
 	ButtonSoundModify: class extends self.ISpriteInstance {},
@@ -6474,13 +6671,29 @@ self.InstanceType = {
 	QuestChestStart: class extends self.ISpriteInstance {},
 	QuestChestDone: class extends self.ISpriteInstance {},
 	QuestScrollbar: class extends self.ISpriteInstance {},
+	B1Button: class extends self.ISpriteInstance {},
+	Item1Level: class extends self.ISpriteFontInstance {},
+	Item1Price: class extends self.ISpriteFontInstance {},
+	B2Button: class extends self.ISpriteInstance {},
+	Item2Level: class extends self.ISpriteFontInstance {},
+	Item2Price: class extends self.ISpriteFontInstance {},
+	B3Button: class extends self.ISpriteInstance {},
+	Item3Level: class extends self.ISpriteFontInstance {},
+	Item3Price: class extends self.ISpriteFontInstance {},
+	B4Button: class extends self.ISpriteInstance {},
+	Item4Level: class extends self.ISpriteFontInstance {},
+	Item4Price: class extends self.ISpriteFontInstance {},
+	B5Button: class extends self.ISpriteInstance {},
+	Item5Level: class extends self.ISpriteFontInstance {},
+	Item5Price: class extends self.ISpriteFontInstance {},
 	Audio: class extends self.IInstance {},
 	Keyboard: class extends self.IInstance {},
 	Touch: class extends self.IInstance {},
 	LocalStorage: class extends self.IInstance {},
 	AJAX: class extends self.IInstance {},
 	Browser: class extends self.IInstance {},
-	JSON: class extends self.IJSONInstance {}
+	JSON: class extends self.IJSONInstance {},
+	Copyclip: class extends self.IInstance {}
 }
 }
 
@@ -6675,7 +6888,7 @@ self.C3_ExpressionFuncs = [
 			const v2 = p._GetNode(2).GetVar();
 			const v3 = p._GetNode(3).GetVar();
 			const v4 = p._GetNode(4).GetVar();
-			return () => (((((v0.GetValue() + v1.GetValue()) + v2.GetValue()) + v3.GetValue()) + v4.GetValue()) / 1.3);
+			return () => (((((v0.GetValue() + v1.GetValue()) + v2.GetValue()) + v3.GetValue()) + v4.GetValue()) / 2);
 		},
 		p => {
 			const n0 = p._GetNode(0);
@@ -6695,6 +6908,10 @@ self.C3_ExpressionFuncs = [
 			const f1 = p._GetNode(1).GetBoundMethod();
 			return () => (n0.ExpObject() - (240 * f1()));
 		},
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => (v0.GetValue() + 250);
+		},
 		() => 858,
 		() => 0.02,
 		() => 1201,
@@ -6713,11 +6930,10 @@ self.C3_ExpressionFuncs = [
 			return () => f0(185, 538);
 		},
 		() => -100,
-		() => 1600,
+		() => 1800,
 		() => "Upgrades",
 		() => "Upgrade1",
 		() => 100,
-		() => 960,
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => (v0.GetValue() / 20);
@@ -6741,8 +6957,6 @@ self.C3_ExpressionFuncs = [
 			return () => (v0.GetValue() * 0.1);
 		},
 		() => "Upgrade2",
-		() => 16777215,
-		() => -281492157629439,
 		() => 2.5,
 		() => 0.5,
 		p => {
@@ -6750,10 +6964,6 @@ self.C3_ExpressionFuncs = [
 			return () => (v0.GetValue() * 0.2);
 		},
 		() => "Upgrade3",
-		() => "BgPopsicleStick",
-		() => 1.02,
-		() => 1.05,
-		() => 0.3,
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => (v0.GetValue() * 0.3);
@@ -6831,6 +7041,20 @@ self.C3_ExpressionFuncs = [
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => (and("https://t.me/share/url?url=https://t.me/frognutbot/gameapp?startapp=", v0.GetValue()) + "&text=%F0%9F%92%B0Catizen%3A%20Unleash%2C%20Play%2C%20Earn%20-%20Where%20Every%20Game%20Leads%20to%20an%20Airdrop%20Adventure!%0A%F0%9F%8E%81Let%27s%20play-to-earn%20airdrop%20right%20now!");
+		},
+		() => "sendInTelegramBtn",
+		p => {
+			const n0 = p._GetNode(0);
+			return () => n0.ExpBehavior("sendInTelegramBtn");
+		},
+		() => "copycodeBtn",
+		p => {
+			const n0 = p._GetNode(0);
+			return () => n0.ExpBehavior("copycodeBtn");
+		},
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => (and("https://t.me/share/url?url=https://t.me/frognutbot/gameapp?startapp=", v0.GetValue()) + "💰Catizen: Unleash, Play, Earn - Where Every Game Leads to an Airdrop Adventure!🎁Let's play-to-earn airdrop right now!");
 		},
 		() => "GameCompletedCode",
 		() => "newgame",
