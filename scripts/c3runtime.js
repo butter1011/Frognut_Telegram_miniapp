@@ -6471,6 +6471,7 @@ self.C3_JsPropNameTable = [
 	{alertRedBg: 0},
 	{TouchScreen: 0},
 	{ProgressLevel: 0},
+	{MainText: 0},
 	{ButtonHomeGame: 0},
 	{ButtonSave: 0},
 	{ButtonSoundModify: 0},
@@ -6532,7 +6533,6 @@ self.C3_JsPropNameTable = [
 	{Browser: 0},
 	{JSON: 0},
 	{Copyclip: 0},
-	{MainText: 0},
 	{GlobalBitcoins: 0},
 	{ClickValueBitcoin: 0},
 	{ClickSeconds: 0},
@@ -6636,6 +6636,7 @@ self.InstanceType = {
 	alertRedBg: class extends self.ISpriteInstance {},
 	TouchScreen: class extends self.ISpriteInstance {},
 	ProgressLevel: class extends self.ISpriteInstance {},
+	MainText: class extends self.ITextInstance {},
 	ButtonHomeGame: class extends self.ISpriteInstance {},
 	ButtonSave: class extends self.ISpriteInstance {},
 	ButtonSoundModify: class extends self.ISpriteInstance {},
@@ -6694,8 +6695,7 @@ self.InstanceType = {
 	AJAX: class extends self.IInstance {},
 	Browser: class extends self.IInstance {},
 	JSON: class extends self.IJSONInstance {},
-	Copyclip: class extends self.IInstance {},
-	MainText: class extends self.ITextInstance {}
+	Copyclip: class extends self.IInstance {}
 }
 }
 
