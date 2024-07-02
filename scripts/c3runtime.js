@@ -7056,7 +7056,7 @@ self.C3_ExpressionFuncs = [
 		() => "Invite",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
-			return () => (and("https://t.me/share/url?url=https://t.me/frognutbot?startapp=", v0.GetValue()) + "&text=%F0%9F%92%B0Catizen%3A%20Unleash%2C%20Play%2C%20Earn%20-%20Where%20Every%20Game%20Leads%20to%20an%20Airdrop%20Adventure!%0A%F0%9F%8E%81Let%27s%20play-to-earn%20airdrop%20right%20now!");
+			return () => (and("https://t.me/share/url?url=https://t.me/frognutbot?start=", v0.GetValue()) + "&text=%F0%9F%92%B0Catizen%3A%20Unleash%2C%20Play%2C%20Earn%20-%20Where%20Every%20Game%20Leads%20to%20an%20Airdrop%20Adventure!%0A%F0%9F%8E%81Let%27s%20play-to-earn%20airdrop%20right%20now!");
 		},
 		() => "sendInTelegramBtn",
 		p => {
@@ -7070,7 +7070,7 @@ self.C3_ExpressionFuncs = [
 		},
 		p => {
 			const v0 = p._GetNode(0).GetVar();
-			return () => (and("https://t.me/share/url?url=https://t.me/frognutbot?startapp=", v0.GetValue()) + "💰Catizen: Unleash, Play, Earn - Where Every Game Leads to an Airdrop Adventure!🎁Let's play-to-earn airdrop right now!");
+			return () => (and("https://t.me/share/url?url=https://t.me/frognutbot?start=", v0.GetValue()) + "💰Catizen: Unleash, Play, Earn - Where Every Game Leads to an Airdrop Adventure!🎁Let's play-to-earn airdrop right now!");
 		},
 		() => "GameCompletedCode",
 		() => "newgame",
