@@ -7065,12 +7065,12 @@ self.C3_ExpressionFuncs = [
 		},
 		() => "copycodeBtn",
 		p => {
-			const n0 = p._GetNode(0);
-			return () => n0.ExpBehavior("copycodeBtn");
-		},
-		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => (and("https://t.me/share/url?url=https://t.me/frognutbot?start=", v0.GetValue()) + "💰Catizen: Unleash, Play, Earn - Where Every Game Leads to an Airdrop Adventure!🎁Let's play-to-earn airdrop right now!");
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => n0.ExpBehavior("copycodeBtn");
 		},
 		() => "GameCompletedCode",
 		() => "newgame",
