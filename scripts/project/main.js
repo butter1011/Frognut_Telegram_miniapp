@@ -1,9 +1,9 @@
 
 // Import any other script files here, e.g.:
 // import * as myModule from "./mymodule.js";
-// import useCopy from "https://cdn.jsdelivr.net/npm/use-copy-to-clipboard-react@1.0.3/dist/index.min.js";
+import * as TMA from "https://cdn.jsdelivr.net/npm/@tma.js/sdk@2.5.1/dist/index.min.js";
 
-runOnStartup(async runtime =>	
+runOnStartup(async runtime =>
 {
 	// Code to run on the loading screen.
 	// Note layouts, objects etc. are not yet available.
@@ -25,12 +25,8 @@ function Tick(runtime)
 	// Code to run every tick
 }
 
-// function copyText(text) {
-//     useCopy(text)
-//         .then(() => {
-//             runtime.trigger("CopySuccess");
-//         })
-//         .catch(err => {
-//             runtime.trigger("CopyFailed", err);
-//         });
-// }
+globalThis.inviteuser = function(runtime)
+{
+    const utils = TMA.initUtils();
+    utils.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent("https://t.me/share/url?url=https://t.me/frognutbot?startapp="&runtime.User_ID&"&text=%F0%9F%92%B0Catizen%3A%20Unleash%2C%20Play%2C%20Earn%20-%20Where%20Every%20Game%20Leads%20to%20an%20Airdrop%20Adventure!%0A%F0%9F%8E%81Let%27s%20play-to-earn%20airdrop%20right%20now!")}`);
+}
