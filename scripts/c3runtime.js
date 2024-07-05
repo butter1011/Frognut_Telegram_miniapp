@@ -4953,6 +4953,15 @@ CurrentType(){return this._JSONTypeOf(this._currentValue)}}};
 }
 
 {
+'use strict';{const C3=self.C3;C3.Plugins.Share=class SharePlugin extends C3.SDKPluginBase{constructor(opts){super(opts)}Release(){super.Release()}}}{const C3=self.C3;C3.Plugins.Share.Type=class ShareType extends C3.SDKTypeBase{constructor(objectClass){super(objectClass)}Release(){super.Release()}OnCreate(){}}}
+{const C3=self.C3;const DOM_COMPONENT_ID="share";C3.Plugins.Share.Instance=class ShareInstance extends C3.SDKInstanceBase{constructor(inst,properties){super(inst,DOM_COMPONENT_ID);this._isSupported=false;this._isFilesSupported=false;this._files=[];this.AddDOMMessageHandlers([["share-completed",()=>this._OnShareCompleted()],["share-failed",()=>this._OnShareFailed()]]);this._runtime.AddLoadPromise(this.PostToDOMAsync("init").then(o=>{this._isFilesSupported=o["isFilesSupported"];this._isSupported=o["isSupported"]}))}_OnShareCompleted(){this.Trigger(C3.Plugins.Share.Cnds.OnShareCompleted)}_OnShareFailed(){this.Trigger(C3.Plugins.Share.Cnds.OnShareFailed)}}}
+{const C3=self.C3;C3.Plugins.Share.Cnds={IsSupported(){return this._isSupported},IsSharingFilesSupported(){return this._isFilesSupported},OnShareCompleted(){return true},OnShareFailed(){return true}}}
+{const C3=self.C3;C3.Plugins.Share.Acts={Share(text,title,url){if(!this._isSupported)return;this._PostToDOMMaybeSync("share",{"text":text,"title":title,"url":url,"files":this._files});C3.clearArray(this._files)},AddFile(filename,mimeType,objectClass){if(!this._isFilesSupported)return;if(!objectClass)return;const inst=objectClass.GetFirstPicked(this._inst);if(!inst)return;const arrayBuffer=inst.GetSdkInstance().GetArrayBufferReadOnly();if(arrayBuffer.byteLength===0)return;const i=mimeType.indexOf(";");
+if(i>=0)mimeType=mimeType.substr(0,i);const FileCtor=self["RealFile"]||self["File"];const file=new FileCtor([arrayBuffer],filename,{"type":mimeType});this._files.push(file)},RequestRate(body,confirm,cancel,appID){this._PostToDOMMaybeSync("request-rate",{"body":body,"confirm":confirm,"cancel":cancel,"appID":appID||this._runtime.GetAppId()})},RequestStore(appID){this._PostToDOMMaybeSync("request-store",{"appID":appID||this._runtime.GetAppId()})}}}{const C3=self.C3;C3.Plugins.Share.Exps={}};
+
+}
+
+{
 'use strict';{const C3=self.C3;C3.Behaviors.Flash=class FlashBehavior extends C3.SDKBehaviorBase{constructor(opts){super(opts)}Release(){super.Release()}}}{const C3=self.C3;C3.Behaviors.Flash.Type=class FlashType extends C3.SDKBehaviorTypeBase{constructor(behaviorType){super(behaviorType)}Release(){super.Release()}OnCreate(){}}}
 {const C3=self.C3;const C3X=self.C3X;const IBehaviorInstance=self.IBehaviorInstance;C3.Behaviors.Flash.Instance=class FlashInstance extends C3.SDKBehaviorInstanceBase{constructor(behInst,properties){super(behInst);this._onTime=0;this._offTime=0;this._stage=0;this._stageTimeLeft=0;this._timeLeft=0;this._StartTicking()}Release(){super.Release()}_Flash(on,off,dur){this._onTime=on;this._offTime=off;this._stage=1;this._stageTimeLeft=off;this._timeLeft=dur;this._inst.GetWorldInfo().SetVisible(false);this._runtime.UpdateRender()}_StopFlashing(){this._timeLeft=
 0;this._inst.GetWorldInfo().SetVisible(true);this._runtime.UpdateRender()}_IsFlashing(){return this._timeLeft>0}SaveToJson(){return{"on":this._onTime,"off":this._offTime,"s":this._stage,"stl":this._stageTimeLeft,"tl":this._timeLeft}}LoadFromJson(o){this._onTime=o["on"];this._offTime=o["off"];this._stage=o["s"];this._stageTimeLeft=o["stl"];this._timeLeft=o["tl"]===null?Infinity:o["tl"]}Tick(){if(this._timeLeft<=0)return;const dt=this._runtime.GetDt(this._inst);this._timeLeft-=dt;if(this._timeLeft<=
@@ -6326,6 +6335,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Browser,
 		C3.Plugins.Json,
 		C3.Plugins.Sparsha_copyclip,
+		C3.Plugins.Share,
 		C3.Plugins.Json.Acts.SetValue,
 		C3.Plugins.AJAX.Acts.Post,
 		C3.Plugins.Json.Exps.ToCompactString,
@@ -6354,7 +6364,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Cnds.CompareVar,
 		C3.Plugins.Text.Acts.SetText,
 		C3.Plugins.System.Cnds.Else,
-		C3.Plugins.Sprite.Acts.SetX,
 		C3.Plugins.Sprite.Cnds.CompareY,
 		C3.Behaviors.DragnDrop.Acts.SetEnabled,
 		C3.Plugins.System.Acts.Wait,
@@ -6369,17 +6378,14 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Spritefont2.Acts.SetOpacity,
 		C3.Plugins.System.Acts.SubVar,
 		C3.Plugins.Audio.Acts.Play,
-		C3.Plugins.Spritefont2.Acts.Destroy,
 		C3.Plugins.System.Cnds.CompareBoolVar,
 		C3.Plugins.System.Cnds.TriggerOnce,
 		C3.Plugins.System.Acts.SetBoolVar,
 		C3.Plugins.Audio.Acts.FadeVolume,
-		C3.ScriptsInEvents.Gamecode_Event70_Act31,
+		C3.ScriptsInEvents.Gamecode_Event64_Act31,
 		C3.Plugins.AJAX.Cnds.OnComplete,
 		C3.Behaviors.Flash.Acts.Flash,
 		C3.Plugins.Audio.Acts.StopAll,
-		C3.Plugins.System.Acts.GoToLayout,
-		C3.Plugins.System.Acts.ToggleBoolVar,
 		C3.Plugins.Audio.Acts.SetMasterVolume,
 		C3.Plugins.System.Cnds.OnLayoutStart,
 		C3.Plugins.Sprite.Acts.StopAnim,
@@ -6390,16 +6396,15 @@ self.C3_GetObjectRefTable = function () {
 		C3.Behaviors.Tween.Cnds.IsPlaying,
 		C3.Plugins.Sprite.Acts.SetScale,
 		C3.Behaviors.Tween.Exps.Value,
-		C3.Plugins.Browser.Acts.GoToURL,
+		C3.Plugins.Browser.Acts.GoToURLWindow,
+		C3.ScriptsInEvents.Gamecode_Event142_Act2,
 		C3.Plugins.Sparsha_copyclip.Acts.ApiCopy,
-		C3.Plugins.System.Acts.LoadState,
-		C3.Plugins.System.Acts.ResetGlobals,
-		C3.Plugins.LocalStorage.Acts.SetItem,
 		C3.Plugins.System.Exps.int,
 		C3.Plugins.Browser.Exps.QueryParam,
 		C3.Plugins.Json.Acts.Parse,
 		C3.Plugins.AJAX.Exps.LastData,
-		C3.Plugins.Json.Exps.Get
+		C3.Plugins.Json.Exps.Get,
+		C3.Plugins.System.Acts.GoToLayout
 	];
 };
 self.C3_JsPropNameTable = [
@@ -6533,6 +6538,7 @@ self.C3_JsPropNameTable = [
 	{Browser: 0},
 	{JSON: 0},
 	{Copyclip: 0},
+	{Share: 0},
 	{GlobalBitcoins: 0},
 	{ClickValueBitcoin: 0},
 	{ClickSeconds: 0},
@@ -6573,8 +6579,7 @@ self.C3_JsPropNameTable = [
 	{Combo: 0},
 	{ComboCounter: 0},
 	{User_ID: 0},
-	{Tutorial: 0},
-	{isMuted: 0}
+	{Tutorial: 0}
 ];
 
 self.InstanceType = {
@@ -6695,7 +6700,8 @@ self.InstanceType = {
 	AJAX: class extends self.IInstance {},
 	Browser: class extends self.IInstance {},
 	JSON: class extends self.IJSONInstance {},
-	Copyclip: class extends self.IInstance {}
+	Copyclip: class extends self.IInstance {},
+	Share: class extends self.IInstance {}
 }
 }
 
@@ -6925,10 +6931,6 @@ self.C3_ExpressionFuncs = [
 			const v0 = p._GetNode(0).GetVar();
 			return () => and((Math.round((v0.GetValue() / 10000)) / 100), "M");
 		},
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => (v0.GetValue() + 250);
-		},
 		() => 858,
 		() => 0.02,
 		() => 1201,
@@ -7052,12 +7054,9 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => n0.ExpBehavior("questChestBtn");
 		},
-		() => "Endgame",
 		() => "Invite",
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => (and("https://t.me/share/url?url=https://t.me/frognutbot?startapp=", v0.GetValue()) + "&text=%F0%9F%92%B0Catizen%3A%20Unleash%2C%20Play%2C%20Earn%20-%20Where%20Every%20Game%20Leads%20to%20an%20Airdrop%20Adventure!%0A%F0%9F%8E%81Let%27s%20play-to-earn%20airdrop%20right%20now!");
-		},
+		() => "https://t.me/share/url?url=https://t.me/frognutbot?startapp=7069393465&text=%F0%9F%92%B0Catizen%3A%20Unleash%2C%20Play%2C%20Earn%20-%20Where%20Every%20Game%20Leads%20to%20an%20Airdrop%20Adventure!%0A%F0%9F%8E%81Let%27s%20play-to-earn%20airdrop%20right%20now!",
+		() => "NewWindow",
 		() => "sendInTelegramBtn",
 		p => {
 			const n0 = p._GetNode(0);
@@ -7072,35 +7071,6 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => n0.ExpBehavior("copycodeBtn");
 		},
-		() => "GameCompletedCode",
-		() => "newgame",
-		() => "GLOBALBITCOINS",
-		() => "CLICKVALUEBITCOINS",
-		() => "CLICKSECONDS",
-		() => "BITSECONDS",
-		() => "BITCOINSMULTIPLY",
-		() => "GAMEPROGRESS",
-		() => "B1VALUE",
-		() => "B2VALUE",
-		() => "B3VALUE",
-		() => "B4VALUE",
-		() => "B5VALUE",
-		() => "B1LEVEL",
-		() => "B2LEVEL",
-		() => "B3LEVEL",
-		() => "B4LEVEL",
-		() => "B5LEVEL",
-		() => "B1COST",
-		() => "B2COST",
-		() => "B3COST",
-		() => "B4COST",
-		() => "B5COST",
-		() => "B1BOOST",
-		() => "B2BOOST",
-		() => "B3BOOST",
-		() => "B4BOOST",
-		() => "B5BOOST",
-		() => "TUTORIAL",
 		() => "LoadGame2",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
