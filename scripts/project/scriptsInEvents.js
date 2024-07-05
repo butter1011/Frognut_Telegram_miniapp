@@ -19,9 +19,9 @@ const scriptsInEvents = {
 		runtime.callFunction("SaveData");
 	},
 
-	async Gamecode_Event145_Act2(runtime, localVars)
+	async Gamecode_Event145_Act1(runtime, localVars)
 	{
- legacyCopy(`https://t.me/share/url?url=https://t.me/frognutbot?start=${ runtime.globalVars.User_ID }💰Catizen: Unleash, Play, Earn - Where Every Game Leads to an Airdrop Adventure!🎁Let's play-to-earn airdrop right now!`);
+ legacyCopy(`https://t.me/share/url?url=https://t.me/frognutbot?startapp=${ runtime.globalVars.User_ID }&text=💰Catizen: Unleash, Play, Earn - Where Every Game Leads to an Airdrop Adventure!🎁Let's play-to-earn airdrop right now!`);
 	}
 
 };
