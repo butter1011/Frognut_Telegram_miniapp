@@ -6397,8 +6397,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Sprite.Acts.SetScale,
 		C3.Behaviors.Tween.Exps.Value,
 		C3.Plugins.Browser.Acts.GoToURLWindow,
-		C3.ScriptsInEvents.Gamecode_Event142_Act2,
-		C3.Plugins.Sparsha_copyclip.Acts.ApiCopy,
+		C3.ScriptsInEvents.Gamecode_Event145_Act2,
 		C3.Plugins.System.Exps.int,
 		C3.Plugins.Browser.Exps.QueryParam,
 		C3.Plugins.Json.Acts.Parse,
@@ -7061,10 +7060,6 @@ self.C3_ExpressionFuncs = [
 		p => {
 			const n0 = p._GetNode(0);
 			return () => n0.ExpBehavior("sendInTelegramBtn");
-		},
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => (and("https://t.me/share/url?url=https://t.me/frognutbot?start=", v0.GetValue()) + "💰Catizen: Unleash, Play, Earn - Where Every Game Leads to an Airdrop Adventure!🎁Let's play-to-earn airdrop right now!");
 		},
 		() => "copycodeBtn",
 		p => {
