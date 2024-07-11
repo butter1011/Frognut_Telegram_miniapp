@@ -6379,7 +6379,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Cnds.TriggerOnce,
 		C3.Plugins.System.Acts.SetBoolVar,
 		C3.Plugins.Audio.Acts.FadeVolume,
-		C3.ScriptsInEvents.Gamecode_Event63_Act2,
+		C3.ScriptsInEvents.Gamecode_Event88_Act2,
 		C3.Plugins.AJAX.Cnds.OnComplete,
 		C3.Behaviors.Flash.Acts.Flash,
 		C3.Plugins.Audio.Acts.StopAll,
@@ -6396,7 +6396,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Sprite.Acts.SetScale,
 		C3.Behaviors.Tween.Exps.Value,
 		C3.Plugins.Browser.Acts.GoToURL,
-		C3.ScriptsInEvents.Gamecode_Event134_Act1,
+		C3.ScriptsInEvents.Gamecode_Event159_Act1,
 		C3.Plugins.System.Exps.int,
 		C3.Plugins.Browser.Exps.QueryParam,
 		C3.Plugins.Json.Acts.Parse,
@@ -6528,6 +6528,10 @@ self.C3_JsPropNameTable = [
 	{B5Button: 0},
 	{Item5Level: 0},
 	{Item5Price: 0},
+	{Item6Level: 0},
+	{Item7Level: 0},
+	{Item9Level: 0},
+	{Item8Level: 0},
 	{MenuBar5: 0},
 	{ComingSoon: 0},
 	{animation: 0},
@@ -6569,6 +6573,22 @@ self.C3_JsPropNameTable = [
 	{B5level: 0},
 	{B5Cost: 0},
 	{B5bitcoinBoostPS: 0},
+	{B6Value: 0},
+	{B6level: 0},
+	{B6Cost: 0},
+	{B6bitcoinBoostPS: 0},
+	{B7Value: 0},
+	{B7level: 0},
+	{B7Cost: 0},
+	{B7bitcoinBoostPS: 0},
+	{B8Value: 0},
+	{B8level: 0},
+	{B8Cost: 0},
+	{B8bitcoinBoostPS: 0},
+	{B9Value: 0},
+	{B9level: 0},
+	{B9Cost: 0},
+	{B9bitcoinBoostPS: 0},
 	{B2Avalaible: 0},
 	{B3Avalaible: 0},
 	{B4Avalaible: 0},
@@ -6696,6 +6716,10 @@ self.InstanceType = {
 	B5Button: class extends self.ISpriteInstance {},
 	Item5Level: class extends self.ISpriteFontInstance {},
 	Item5Price: class extends self.ISpriteFontInstance {},
+	Item6Level: class extends self.ISpriteFontInstance {},
+	Item7Level: class extends self.ISpriteFontInstance {},
+	Item9Level: class extends self.ISpriteFontInstance {},
+	Item8Level: class extends self.ISpriteFontInstance {},
 	MenuBar5: class extends self.ISpriteInstance {},
 	ComingSoon: class extends self.ITextInstance {},
 	animation: class extends self.ISpriteInstance {},
@@ -6902,10 +6926,6 @@ self.C3_ExpressionFuncs = [
 			return () => (((((v0.GetValue() + v1.GetValue()) + v2.GetValue()) + v3.GetValue()) + v4.GetValue()) / 2);
 		},
 		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => Math.round(v0.GetValue());
-		},
-		p => {
 			const n0 = p._GetNode(0);
 			return () => ((-n0.ExpObject()) + 1850);
 		},
@@ -6922,6 +6942,10 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			const f1 = p._GetNode(1).GetBoundMethod();
 			return () => (n0.ExpObject() - (240 * f1()));
+		},
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => Math.round(v0.GetValue());
 		},
 		() => 1000000000000,
 		p => {
@@ -6979,30 +7003,53 @@ self.C3_ExpressionFuncs = [
 			const v0 = p._GetNode(0).GetVar();
 			return () => (v0.GetValue() * 0.1);
 		},
+		() => 99,
 		() => "Upgrade2",
 		() => 2.5,
-		() => 0.5,
+		() => 0.2,
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => (v0.GetValue() * 0.15);
+		},
+		() => "Upgrade3",
+		() => 0.25,
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => (v0.GetValue() * 0.2);
 		},
-		() => "Upgrade3",
+		() => "Upgrade4",
+		() => 0.3,
+		() => "Factory",
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => (v0.GetValue() * 0.25);
+		},
+		() => "Upgrade5",
+		() => 0.4,
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => (v0.GetValue() * 0.3);
 		},
-		() => "Upgrade4",
-		() => "Factory",
+		() => "Upgrade6",
+		() => 0.45,
 		p => {
 			const v0 = p._GetNode(0).GetVar();
-			return () => (v0.GetValue() % 6);
+			return () => (v0.GetValue() * 0.35);
 		},
-		() => "Upgrade5",
-		() => 1.5,
+		() => "Upgrade7",
+		() => 0.5,
 		p => {
 			const v0 = p._GetNode(0).GetVar();
-			return () => (v0.GetValue() % 3);
+			return () => (v0.GetValue() * 0.4);
 		},
+		() => "Upgrade8",
+		() => 0.55,
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => (v0.GetValue() * 0.45);
+		},
+		() => "Upgrade9",
+		() => 0.6,
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => (v0.GetValue() * 0.5);
@@ -7017,7 +7064,6 @@ self.C3_ExpressionFuncs = [
 		() => -10,
 		() => "CombosMultiplier",
 		() => 0.075,
-		() => 99,
 		() => 15,
 		() => 89,
 		() => "c1",
@@ -7059,6 +7105,7 @@ self.C3_ExpressionFuncs = [
 		},
 		() => "questChestBtn",
 		() => 1.3,
+		() => 1.5,
 		p => {
 			const n0 = p._GetNode(0);
 			return () => n0.ExpBehavior("questChestBtn");
