@@ -6356,7 +6356,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Spritefont2.Exps.Y,
 		C3.Plugins.Sprite.Acts.MoveForward,
 		C3.Plugins.Spritefont2.Acts.SetText,
-		C3.Plugins.System.Acts.SetVar,
 		C3.Plugins.Sprite.Acts.SetY,
 		C3.Plugins.Sprite.Exps.Y,
 		C3.Plugins.Sprite.Acts.SetHeight,
@@ -6373,6 +6372,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Sprite.Acts.SetOpacity,
 		C3.Plugins.Spritefont2.Acts.SetOpacity,
 		C3.Plugins.System.Acts.SubVar,
+		C3.Plugins.System.Acts.SetVar,
 		C3.Plugins.Audio.Acts.Play,
 		C3.Plugins.System.Acts.Wait,
 		C3.Plugins.System.Cnds.CompareBoolVar,
@@ -6387,6 +6387,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Audio.Acts.SetMasterVolume,
 		C3.Plugins.System.Cnds.OnLayoutStart,
 		C3.Plugins.Sprite.Acts.StopAnim,
+		C3.ScriptsInEvents.Gamecode_Event96_Act5,
 		C3.Plugins.Sprite.Cnds.OnAnimFinished,
 		C3.Plugins.Touch.Cnds.OnTapGestureObject,
 		C3.Plugins.System.Acts.SetLayerVisible,
@@ -6916,14 +6917,6 @@ self.C3_ExpressionFuncs = [
 			const v0 = p._GetNode(0).GetVar();
 			const v1 = p._GetNode(1).GetVar();
 			return () => (Math.round(v0.GetValue()) * v1.GetValue());
-		},
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			const v1 = p._GetNode(1).GetVar();
-			const v2 = p._GetNode(2).GetVar();
-			const v3 = p._GetNode(3).GetVar();
-			const v4 = p._GetNode(4).GetVar();
-			return () => (((((v0.GetValue() + v1.GetValue()) + v2.GetValue()) + v3.GetValue()) + v4.GetValue()) / 2);
 		},
 		p => {
 			const n0 = p._GetNode(0);
