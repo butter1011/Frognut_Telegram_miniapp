@@ -35,13 +35,20 @@ const scriptsInEvents = {
 
 	async Loadingcode_Event57_Act31(runtime, localVars)
 	{
-		let LastTime = new Date(runtime.globalVars.LastTime);
-		let CurrentTime = new Date(runtime.globalVars.CurrentTime);
+		const LastTime = new Date(runtime.globalVars.LastTime);
+		const CurrentTime = new Date(runtime.globalVars.CurrentTime);
 		
-		let timeDiffer = CurrentTime.getTime() - LastTime.getTime();
-		let timeDiffInSeconds = Math.floor(timeDiffer / 1000);
+		const timeDiffer = CurrentTime.getTime() - LastTime.getTime();
+		const timeDiffInSeconds = Math.floor(timeDiffer / 1000);
 		
 		console.log("TimeDifference----------------->", timeDiffInSeconds);
+		
+		const interval_sum = runtime.globalVars.B1Value + runtime.globalVars.B2Value + runtime.globalVars.B3Value + runtime.globalVars.B4Value + runtime.globalVars.B5Value + runtime.globalVars.B6Value + runtime.globalVars.B7Value + runtime.globalVars.B8Value + runtime.globalVars.B9Value;
+		
+		runtime.globalVars.FarmingValue = Math.floor(interval_sum / 0.05 * interval_sum);
+		
+		console.log("FarmingValue----------------->", FarmingValue);
+		
 	}
 
 };
