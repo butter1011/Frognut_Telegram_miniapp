@@ -6884,11 +6884,11 @@ self.C3_ExpressionFuncs = [
 		() => -10,
 		() => 0,
 		() => "",
+		() => 1,
 		p => {
 			const v0 = p._GetNode(0).GetVar();
-			return () => and("+", v0.GetValue());
+			return () => and("+", Math.floor(v0.GetValue()));
 		},
-		() => 1,
 		() => "Main Bitcoin Touch",
 		() => 7,
 		() => 6,

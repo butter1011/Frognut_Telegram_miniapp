@@ -39,16 +39,15 @@ const scriptsInEvents = {
 		const CurrentTime = new Date(runtime.globalVars.CurrentTime);
 		
 		const timeDiffer = CurrentTime.getTime() - LastTime.getTime();
-		const timeDiffInSeconds = Math.floor(timeDiffer / 1000);
+		let timeDiffInSeconds = Math.floor(timeDiffer / 1000);
 		
 		console.log("TimeDifference----------------->", timeDiffInSeconds);
 		
 		const interval_sum = runtime.globalVars.B1Value + runtime.globalVars.B2Value + runtime.globalVars.B3Value + runtime.globalVars.B4Value + runtime.globalVars.B5Value + runtime.globalVars.B6Value + runtime.globalVars.B7Value + runtime.globalVars.B8Value + runtime.globalVars.B9Value;
 		
+		if(timeDiffInSeconds > 10800) timeDiffInSeconds = 10800;
 		runtime.globalVars.FarmingValue = timeDiffInSeconds / 0.05 * interval_sum;
 		
-		console.log("interval_sum----------------->", interval_sum);
-		console.log("FarmingValue----------------->", runtime.globalVars.FarmingValue);
 		
 	}
 
