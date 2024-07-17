@@ -6351,6 +6351,11 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Sprite.Acts.SetAngle,
 		C3.Plugins.System.Exps.random,
 		C3.Plugins.Sprite.Acts.SetAnim,
+		C3.Plugins.System.Cnds.OnLayoutStart,
+		C3.Plugins.Audio.Acts.StopAll,
+		C3.Plugins.Audio.Acts.Play,
+		C3.Plugins.Sprite.Acts.StopAnim,
+		C3.ScriptsInEvents.Gamecode_Event14_Act5,
 		C3.Plugins.System.Cnds.EveryTick,
 		C3.Plugins.Spritefont2.Acts.SetY,
 		C3.Plugins.Spritefont2.Exps.Y,
@@ -6373,21 +6378,16 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Spritefont2.Acts.SetOpacity,
 		C3.Plugins.System.Acts.SubVar,
 		C3.Plugins.System.Acts.SetVar,
-		C3.Plugins.Audio.Acts.Play,
 		C3.Plugins.System.Acts.Wait,
 		C3.Plugins.System.Cnds.CompareBoolVar,
 		C3.Plugins.System.Cnds.TriggerOnce,
 		C3.Plugins.System.Acts.SetBoolVar,
 		C3.Plugins.Audio.Acts.FadeVolume,
-		C3.ScriptsInEvents.Gamecode_Event88_Act2,
+		C3.ScriptsInEvents.Gamecode_Event90_Act2,
 		C3.Plugins.AJAX.Cnds.OnComplete,
 		C3.Behaviors.Flash.Acts.Flash,
-		C3.Plugins.Audio.Acts.StopAll,
 		C3.Plugins.System.Acts.ToggleBoolVar,
 		C3.Plugins.Audio.Acts.SetMasterVolume,
-		C3.Plugins.System.Cnds.OnLayoutStart,
-		C3.Plugins.Sprite.Acts.StopAnim,
-		C3.ScriptsInEvents.Gamecode_Event96_Act5,
 		C3.Plugins.Sprite.Cnds.OnAnimFinished,
 		C3.Plugins.Touch.Cnds.OnTapGestureObject,
 		C3.Plugins.System.Acts.SetLayerVisible,
@@ -6904,6 +6904,8 @@ self.C3_ExpressionFuncs = [
 		() => "Red",
 		() => 9,
 		() => 10,
+		() => "Initial Values",
+		() => -10,
 		() => "Update",
 		p => {
 			const n0 = p._GetNode(0);
@@ -6956,11 +6958,6 @@ self.C3_ExpressionFuncs = [
 			return () => and((Math.round((v0.GetValue() / 10000)) / 100), "M");
 		},
 		() => 0.05,
-		() => "m2",
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0(0, 360);
-		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0(10, 20);
@@ -6971,6 +6968,10 @@ self.C3_ExpressionFuncs = [
 		},
 		() => -100,
 		() => 1800,
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0(0, 360);
+		},
 		() => "Upgrades",
 		() => "Upgrade1",
 		() => 100,
@@ -7053,8 +7054,6 @@ self.C3_ExpressionFuncs = [
 		() => "Sound",
 		() => "speakeroff",
 		() => "speakeron",
-		() => "Initial Values",
-		() => -10,
 		() => "CombosMultiplier",
 		() => 0.075,
 		() => 15,

@@ -15,17 +15,17 @@ function legacyCopy(value) {
 
 const scriptsInEvents = {
 
-	async Gamecode_Event88_Act2(runtime, localVars)
-	{
-		runtime.callFunction("SaveData");
-	},
-
-	async Gamecode_Event96_Act5(runtime, localVars)
+	async Gamecode_Event14_Act5(runtime, localVars)
 	{
 		if (window.Telegram.WebApp) {
 			Telegram.WebApp.ready();
 			window.Telegram.WebApp.enableClosingConfirmation();
 		}
+	},
+
+	async Gamecode_Event90_Act2(runtime, localVars)
+	{
+		runtime.callFunction("SaveData");
 	},
 
 	async Gamecode_Event159_Act1(runtime, localVars)
