@@ -6398,11 +6398,10 @@ self.C3_GetObjectRefTable = function () {
 		C3.Behaviors.Tween.Exps.Value,
 		C3.Plugins.Browser.Acts.GoToURL,
 		C3.ScriptsInEvents.Gamecode_Event159_Act1,
-		C3.Plugins.System.Exps.int,
-		C3.Plugins.Browser.Exps.QueryParam,
 		C3.Plugins.Json.Acts.Parse,
 		C3.Plugins.AJAX.Exps.LastData,
 		C3.Plugins.Json.Exps.Get,
+		C3.ScriptsInEvents.Loadingcode_Event57_Act31,
 		C3.Plugins.System.Acts.GoToLayout
 	];
 };
@@ -6601,8 +6600,11 @@ self.C3_JsPropNameTable = [
 	{BTC4Sound: 0},
 	{BTC5Sound: 0},
 	{Combo: 0},
+	{LastTime: 0},
+	{CurrentTime: 0},
 	{ComboCounter: 0},
 	{User_ID: 0},
+	{FarmingValue: 0},
 	{Tutorial: 0}
 ];
 
@@ -7118,11 +7120,7 @@ self.C3_ExpressionFuncs = [
 			return () => n0.ExpBehavior("copycodeBtn");
 		},
 		() => "LoadGame2",
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			const f1 = p._GetNode(1).GetBoundMethod();
-			return () => f0(f1("user_id"));
-		},
+		() => 7069393465,
 		() => "FetchUserData",
 		() => "https://telegrambotgame-backend.vercel.app/api/v1/user",
 		p => {
@@ -7240,6 +7238,14 @@ self.C3_ExpressionFuncs = [
 		p => {
 			const n0 = p._GetNode(0);
 			return () => n0.ExpObject("user.Tutorial");
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => n0.ExpObject("user.updatedAt");
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => n0.ExpObject("currentTime");
 		},
 		() => "LogoCode"
 ];

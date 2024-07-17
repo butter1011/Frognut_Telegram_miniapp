@@ -31,6 +31,17 @@ const scriptsInEvents = {
 	async Gamecode_Event159_Act1(runtime, localVars)
 	{
  legacyCopy(`https://t.me/share/url?url=https://t.me/frognutbot?startapp=${ runtime.globalVars.User_ID }&text=💰Catizen: Unleash, Play, Earn - Where Every Game Leads to an Airdrop Adventure!🎁Let's play-to-earn airdrop right now!`);
+	},
+
+	async Loadingcode_Event57_Act31(runtime, localVars)
+	{
+		let LastTime = new Date(runtime.globalVars.LastTime);
+		let CurrentTime = new Date(runtime.globalVars.CurrentTime);
+		
+		let timeDiffer = CurrentTime.getTime() - LastTime.getTime();
+		let timeDiffInSeconds = Math.floor(timeDiffer / 1000);
+		
+		console.log("TimeDifference----------------->", timeDiffInSeconds);
 	}
 
 };
