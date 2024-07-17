@@ -6968,7 +6968,6 @@ self.C3_ExpressionFuncs = [
 			const v0 = p._GetNode(0).GetVar();
 			return () => and((Math.round((v0.GetValue() / 10000)) / 100), "M");
 		},
-		() => 0.05,
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0(10, 20);
@@ -7067,6 +7066,7 @@ self.C3_ExpressionFuncs = [
 		() => "speakeron",
 		() => "CombosMultiplier",
 		() => 0.075,
+		() => 0.05,
 		() => 15,
 		() => 89,
 		() => "c1",

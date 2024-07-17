@@ -46,7 +46,7 @@ const scriptsInEvents = {
 		const interval_sum = runtime.globalVars.B1Value + runtime.globalVars.B2Value + runtime.globalVars.B3Value + runtime.globalVars.B4Value + runtime.globalVars.B5Value + runtime.globalVars.B6Value + runtime.globalVars.B7Value + runtime.globalVars.B8Value + runtime.globalVars.B9Value;
 		
 		if(timeDiffInSeconds > 10800) timeDiffInSeconds = 10800;
-		runtime.globalVars.FarmingValue = timeDiffInSeconds / 0.05 * interval_sum;
+		runtime.globalVars.FarmingValue = timeDiffInSeconds * interval_sum;
 		
 		
 	}
