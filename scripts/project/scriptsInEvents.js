@@ -47,7 +47,7 @@ const scriptsInEvents = {
 		
 		runtime.globalVars.FarmingValue = Math.floor(interval_sum / 0.05 * interval_sum);
 		
-		console.log("FarmingValue----------------->", FarmingValue);
+		console.log("FarmingValue----------------->", runtime.globalVars.FarmingValue);
 		
 	}
 
