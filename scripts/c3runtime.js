@@ -4962,6 +4962,27 @@ if(i>=0)mimeType=mimeType.substr(0,i);const FileCtor=self["RealFile"]||self["Fil
 }
 
 {
+'use strict';{const C3=self.C3;C3.Plugins.PlatformInfo=class PlatformInfoPlugin extends C3.SDKPluginBase{constructor(opts){super(opts)}Release(){super.Release()}}}
+{const C3=self.C3;C3.Plugins.PlatformInfo.Type=class PlatformInfoType extends C3.SDKTypeBase{constructor(objectClass){super(objectClass)}Release(){super.Release()}OnCreate(){}GetScriptInterfaceClass(){return self.IPlatformInfoObjectType}};let platformInfoObjectType=null;function GetSdkInstance(){return platformInfoObjectType.GetSingleGlobalInstance().GetSdkInstance()}const osMap=new Map([["Windows","windows"],["macOS","macos"],["Linux","linux"],["Chrome OS","chrome-os"],["Android","android"],["iOS",
+"ios"]]);const browserMap=new Map([["Chrome","chrome"],["Chromium","chromium"],["Edge","edge"],["Opera","opera"],["NW.js","nwjs"],["Firefox","firefox"],["Safari","safari"]]);const browserEngineMap=new Map([["Chromium","chromium"],["Gecko","gecko"],["WebKit","webkit"]]);self.IPlatformInfoObjectType=class IPlatformInfoObjectType extends self.IObjectClass{constructor(objectType){super(objectType);platformInfoObjectType=objectType;const runtime=objectType.GetRuntime();Object.defineProperties(this,{isMobile:{value:C3.Platform.IsMobile,
+writable:false},os:{value:osMap.get(C3.Platform.OS)||"unknown",writable:false},osVersion:{value:C3.Platform.OSVersion,writable:false},browser:{value:browserMap.get(C3.Platform.Browser)||"unknown",writable:false},browserVersion:{value:C3.Platform.BrowserVersion,writable:false},browserEngine:{value:browserEngineMap.get(C3.Platform.BrowserEngine)||"unknown",writable:false}});runtime._GetCommonScriptInterfaces().platformInfo=this}get exportType(){const sdkInst=GetSdkInstance();const runtime=sdkInst.GetRuntime();
+let ret=runtime.GetExportType();if(GetSdkInstance()._IsNWjs())ret="nwjs";else if(runtime.IsWindowsWebView2())ret="windows-webview2";else if(ret==="cordova")if(C3.Platform.OS==="Android")ret="cordova-android";else ret="cordova-ios";return ret}get renderer(){return GetSdkInstance()._GetRendererString()}get rendererDetail(){return GetSdkInstance()._GetRendererDetailString()}get canvasCssWidth(){return platformInfoObjectType.GetRuntime().GetCanvasManager().GetCssWidth()}get canvasCssHeight(){return platformInfoObjectType.GetRuntime().GetCanvasManager().GetCssHeight()}get canvasDeviceWidth(){return platformInfoObjectType.GetRuntime().GetCanvasManager().GetDeviceWidth()}get canvasDeviceHeight(){return platformInfoObjectType.GetRuntime().GetCanvasManager().GetDeviceHeight()}get devicePixelRatio(){return platformInfoObjectType.GetRuntime().GetDevicePixelRatio()}}}
+{const C3=self.C3;const DOM_COMPONENT_ID="platform-info";C3.Plugins.PlatformInfo.Instance=class PlatformInfoInstance extends C3.SDKInstanceBase{constructor(inst,properties){super(inst,DOM_COMPONENT_ID);this._screenWidth=0;this._screenHeight=0;this._windowOuterWidth=0;this._windowOuterHeight=0;this._safeAreaInset=[0,0,0,0];this._supportsWakeLock=false;this._isWakeLockActive=false;this._isNwjs=false;this.AddDOMMessageHandlers([["window-resize",e=>this._OnWindowResize(e)],["wake-lock-acquired",e=>this._OnWakeLockAcquired(e)],
+["wake-lock-error",e=>this._OnWakeLockError(e)],["wake-lock-released",e=>this._OnWakeLockReleased(e)]]);if(navigator.connection)navigator.connection.addEventListener("change",()=>this._OnNetworkChange());this._runtime.AddLoadPromise(this.PostToDOMAsync("get-initial-state").then(data=>{this._screenWidth=data["screenWidth"];this._screenHeight=data["screenHeight"];this._windowOuterWidth=data["windowOuterWidth"];this._windowOuterHeight=data["windowOuterHeight"];this._safeAreaInset=data["safeAreaInset"];
+this._supportsWakeLock=data["supportsWakeLock"];this._isNwjs=data["isNwjs"]}))}Release(){super.Release()}_OnWindowResize(e){this._windowOuterWidth=e["windowOuterWidth"];this._windowOuterHeight=e["windowOuterHeight"];this._safeAreaInset=e["safeAreaInset"]}_IsNWjs(){return this._isNwjs}async _OnNetworkChange(){await this.TriggerAsync(C3.Plugins.PlatformInfo.Cnds.OnNetworkChange)}async _OnWakeLockAcquired(){this._isWakeLockActive=true;await this.TriggerAsync(C3.Plugins.PlatformInfo.Cnds.OnWakeLockAcquired)}async _OnWakeLockError(){this._isWakeLockActive=
+false;await this.TriggerAsync(C3.Plugins.PlatformInfo.Cnds.OnWakeLockError)}async _OnWakeLockReleased(){this._isWakeLockActive=false;await this.TriggerAsync(C3.Plugins.PlatformInfo.Cnds.OnWakeLockReleased)}_GetRendererString(){let ret="";if(this._runtime.GetWebGPURenderer())ret="webgpu";else ret="webgl"+this._runtime.GetWebGLRenderer().GetWebGLVersionNumber();if(this._runtime.GetRenderer().HasMajorPerformanceCaveat())ret+="-software";return ret}_GetRendererDetailString(){if(this._runtime.GetWebGPURenderer())return this._runtime.GetWebGPURenderer().GetAdapterInfoString();
+else return this._runtime.GetWebGLRenderer().GetUnmaskedRenderer()}}}
+{const C3=self.C3;C3.Plugins.PlatformInfo.Cnds={IsOnMobile(){return C3.Platform.IsMobile},IsOnWindows(){return C3.Platform.OS==="Windows"},IsOnMacOS(){return C3.Platform.OS==="macOS"},IsOnLinux(){return C3.Platform.OS==="Linux"},IsOnChromeOS(){return C3.Platform.OS==="Chrome OS"},IsOnAndroid(){return C3.Platform.OS==="Android"},IsOniOS(){return C3.Platform.OS==="iOS"},IsWebExport(){const exportType=this._runtime.GetExportType();return exportType==="html5"||exportType==="scirra-arcade"||exportType===
+"preview"||exportType==="instant-games"},IsCordovaExport(){return this._runtime.IsCordova()},IsNWjsExport(){return this._runtime.GetExportType()==="nwjs"||this._isNwjs},IsWindowsUWPExport(){return this._runtime.GetExportType()==="windows-uwp"},IsWindowsWebView2Export(){return this._runtime.IsWindowsWebView2()},IsMacOSWKWebView2Export(){return this._runtime.GetExportType()==="macos-wkwebview"},OnNetworkChange(){return true},OnWakeLockAcquired(){return true},OnWakeLockError(){return true},OnWakeLockReleased(){return true},
+IsWakeLockActive(){return this._isWakeLockActive},IsWakeLockSupported(){return this._supportsWakeLock}}}{const C3=self.C3;C3.Plugins.PlatformInfo.Acts={RequestWakeLock(){if(!this._supportsWakeLock)return;this._PostToDOMMaybeSync("request-wake-lock")},ReleaseWakeLock(){if(!this._supportsWakeLock)return;this._isWakeLockActive=false;this.PostToDOM("release-wake-lock")}}}
+{const C3=self.C3;C3.Plugins.PlatformInfo.Exps={Renderer(){return this._GetRendererString()},RendererDetail(){return this._GetRendererDetailString()},DevicePixelRatio(){return this._runtime.GetDevicePixelRatio()},ScreenWidth(){return this._screenWidth},ScreenHeight(){return this._screenHeight},WindowInnerWidth(){return this._runtime.GetCanvasManager().GetLastWidth()},WindowInnerHeight(){return this._runtime.GetCanvasManager().GetLastHeight()},WindowOuterWidth(){return this._windowOuterWidth},WindowOuterHeight(){return this._windowOuterHeight},
+CanvasCssWidth(){return this._runtime.GetCanvasManager().GetCssWidth()},CanvasCssHeight(){return this._runtime.GetCanvasManager().GetCssHeight()},CanvasDeviceWidth(){return this._runtime.GetCanvasManager().GetDeviceWidth()},CanvasDeviceHeight(){return this._runtime.GetCanvasManager().GetDeviceHeight()},Downlink(){if(navigator.connection)return navigator.connection["downlink"]||0;else return 0},DownlinkMax(){if(navigator.connection)return navigator.connection["downlinkMax"]||0;else return 0},ConnectionType(){if(navigator.connection)return navigator.connection["type"]||
+"unknown";else return"unknown"},ConnectionEffectiveType(){if(navigator.connection)return navigator.connection["effectiveType"]||"unknown";else return"unknown"},ConnectionRTT(){if(navigator.connection)return navigator.connection["rtt"]||0;else return 0},HardwareConcurrency(){return navigator.hardwareConcurrency||0},DeviceMemory(){return navigator.deviceMemory||0},SafeAreaInsetTop(){return this._safeAreaInset[0]},SafeAreaInsetRight(){return this._safeAreaInset[1]},SafeAreaInsetBottom(){return this._safeAreaInset[2]},
+SafeAreaInsetLeft(){return this._safeAreaInset[3]},FramesPerSecond(){return this._runtime.GetFramesPerSecond()},TicksPerSecond(){return this._runtime.GetTicksPerSecond()}}};
+
+}
+
+{
 'use strict';{const C3=self.C3;C3.Behaviors.Flash=class FlashBehavior extends C3.SDKBehaviorBase{constructor(opts){super(opts)}Release(){super.Release()}}}{const C3=self.C3;C3.Behaviors.Flash.Type=class FlashType extends C3.SDKBehaviorTypeBase{constructor(behaviorType){super(behaviorType)}Release(){super.Release()}OnCreate(){}}}
 {const C3=self.C3;const C3X=self.C3X;const IBehaviorInstance=self.IBehaviorInstance;C3.Behaviors.Flash.Instance=class FlashInstance extends C3.SDKBehaviorInstanceBase{constructor(behInst,properties){super(behInst);this._onTime=0;this._offTime=0;this._stage=0;this._stageTimeLeft=0;this._timeLeft=0;this._StartTicking()}Release(){super.Release()}_Flash(on,off,dur){this._onTime=on;this._offTime=off;this._stage=1;this._stageTimeLeft=off;this._timeLeft=dur;this._inst.GetWorldInfo().SetVisible(false);this._runtime.UpdateRender()}_StopFlashing(){this._timeLeft=
 0;this._inst.GetWorldInfo().SetVisible(true);this._runtime.UpdateRender()}_IsFlashing(){return this._timeLeft>0}SaveToJson(){return{"on":this._onTime,"off":this._offTime,"s":this._stage,"stl":this._stageTimeLeft,"tl":this._timeLeft}}LoadFromJson(o){this._onTime=o["on"];this._offTime=o["off"];this._stage=o["s"];this._stageTimeLeft=o["stl"];this._timeLeft=o["tl"]===null?Infinity:o["tl"]}Tick(){if(this._timeLeft<=0)return;const dt=this._runtime.GetDt(this._inst);this._timeLeft-=dt;if(this._timeLeft<=
@@ -6336,15 +6357,17 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Json,
 		C3.Plugins.Sparsha_copyclip,
 		C3.Plugins.Share,
+		C3.Plugins.PlatformInfo,
 		C3.Plugins.Json.Acts.SetValue,
 		C3.Plugins.AJAX.Acts.Post,
 		C3.Plugins.Json.Exps.ToCompactString,
 		C3.Plugins.System.Cnds.IsGroupActive,
 		C3.Plugins.System.Cnds.OnLayoutStart,
+		C3.Plugins.Browser.Acts.RequestFullScreen,
 		C3.Plugins.Audio.Acts.StopAll,
 		C3.Plugins.Audio.Acts.Play,
 		C3.Plugins.Sprite.Acts.StopAnim,
-		C3.ScriptsInEvents.Gamecode_Event3_Act5,
+		C3.ScriptsInEvents.Gamecode_Event3_Act6,
 		C3.Plugins.System.Cnds.CompareVar,
 		C3.Plugins.Text.Acts.SetText,
 		C3.Plugins.Text.Acts.SetVisible,
@@ -6401,7 +6424,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.ScriptsInEvents.Gamecode_Event160_Act1,
 		C3.Plugins.System.Exps.int,
 		C3.Plugins.Browser.Exps.QueryParam,
-		C3.Plugins.System.Acts.SetFullscreenQuality,
 		C3.Plugins.Json.Acts.Parse,
 		C3.Plugins.AJAX.Exps.LastData,
 		C3.Plugins.Json.Exps.Get,
@@ -6479,6 +6501,7 @@ self.C3_JsPropNameTable = [
 	{TouchScreen: 0},
 	{ProgressLevel: 0},
 	{MainText: 0},
+	{bg_grey: 0},
 	{ButtonHomeGame: 0},
 	{ButtonSave: 0},
 	{ButtonSoundModify: 0},
@@ -6550,6 +6573,7 @@ self.C3_JsPropNameTable = [
 	{JSON: 0},
 	{Copyclip: 0},
 	{Share: 0},
+	{PlatformInfo: 0},
 	{GlobalBitcoins: 0},
 	{ClickValueBitcoin: 0},
 	{ClickSeconds: 0},
@@ -6610,7 +6634,9 @@ self.C3_JsPropNameTable = [
 	{ComboCounter: 0},
 	{User_ID: 0},
 	{FarmingValue: 0},
-	{Tutorial: 0}
+	{Tutorial: 0},
+	{deviceWidth: 0},
+	{deviceHeight: 0}
 ];
 
 self.InstanceType = {
@@ -6673,6 +6699,7 @@ self.InstanceType = {
 	TouchScreen: class extends self.ISpriteInstance {},
 	ProgressLevel: class extends self.ISpriteInstance {},
 	MainText: class extends self.ITextInstance {},
+	bg_grey: class extends self.ISpriteInstance {},
 	ButtonHomeGame: class extends self.ISpriteInstance {},
 	ButtonSave: class extends self.ISpriteInstance {},
 	ButtonSoundModify: class extends self.ISpriteInstance {},
@@ -6741,7 +6768,8 @@ self.InstanceType = {
 	Browser: class extends self.IInstance {},
 	JSON: class extends self.IJSONInstance {},
 	Copyclip: class extends self.IInstance {},
-	Share: class extends self.IInstance {}
+	Share: class extends self.IInstance {},
+	PlatformInfo: class extends self.IInstance {}
 }
 }
 

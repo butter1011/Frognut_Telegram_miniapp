@@ -10,12 +10,21 @@ function legacyCopy(value) {
     ta.remove()
   }
   
-
+function setLayout(runtime){
+	const width = runtime.platformInfo.canvasDeviceWidth;
+	const height = runtime.platformInfo.canvasDeviceHeight;
+	
+	runtime.globalVars.deviceWidth = width;
+	runtime.globalVars.deviceHeight = height;
+	
+	console.log("------------>height", height);
+	console.log("------------>width", width);
+}
 
 
 const scriptsInEvents = {
 
-	async Gamecode_Event3_Act5(runtime, localVars)
+	async Gamecode_Event3_Act6(runtime, localVars)
 	{
 		if (window.Telegram.WebApp) {
 			Telegram.WebApp.ready();
