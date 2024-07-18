@@ -6401,6 +6401,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.ScriptsInEvents.Gamecode_Event160_Act1,
 		C3.Plugins.System.Exps.int,
 		C3.Plugins.Browser.Exps.QueryParam,
+		C3.Plugins.System.Acts.SetFullscreenQuality,
 		C3.Plugins.Json.Acts.Parse,
 		C3.Plugins.AJAX.Exps.LastData,
 		C3.Plugins.Json.Exps.Get,
