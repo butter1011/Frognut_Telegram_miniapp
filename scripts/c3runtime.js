@@ -4535,6 +4535,39 @@ await imageInfo.LoadStaticTexture(runtime.GetRenderer(),{sampling:runtime.GetSam
 }
 
 {
+'use strict';{const C3=self.C3;const DOM_COMPONENT_ID="html-element";C3.Plugins.HTMLElement=class HTMLElementPlugin extends C3.SDKDOMPluginBase{constructor(opts){super(opts,DOM_COMPONENT_ID);this.AddElementMessageHandler("initial-content",(sdkInst,e)=>sdkInst._OnInitialContent(e));this.AddElementMessageHandler("click",(sdkInst,e)=>sdkInst._OnClick(e));this.AddElementMessageHandler("animationend",(sdkInst,e)=>sdkInst._OnAnimationEnd(e))}Release(){super.Release()}}}
+{const C3=self.C3;C3.Plugins.HTMLElement.Type=class HTMLElementType extends C3.SDKTypeBase{constructor(objectClass){super(objectClass)}Release(){super.Release()}OnCreate(){}}}
+{const C3=self.C3;const C3X=self.C3X;const TAG=0;const CONTENT_STR=1;const CONTENT_TYPE=2;const INITIALLY_VISIBLE=3;const ID=4;const CLASS_NAME=5;const ALLOW_CONTEXT_MENU=6;const STOP_INPUT_EVENTS=7;const SET_COLOR=9;const DEFAULT_COLOR=10;const SET_BACKGROUND_COLOR=11;const DEFAULT_BACKGROUND_COLOR=12;const AUTO_FONT_SIZE=13;const ALLOW_TEXT_SELECTION=14;const STYLE_ATTRIBUTE=15;const DOM_COMPONENT_ID="html-element";C3.Plugins.HTMLElement.Instance=class HTMLElementInstance extends C3.SDKDOMInstanceBase{constructor(inst,
+properties){super(inst,DOM_COMPONENT_ID);this._tag="div";this._htmlContent="";this._textContent="";this._id="";this._className="";this._targetId="";this._targetClass="";this._cssAnimationName="";let initialStr="";this._initialType="html";let allowContextMenu=false;let stopInputEventsMode=0;let setColorStyle=false;let defaultColorStyle=C3.New(C3.Color);let setBackgroundColorStyle=false;let defaultBackgroundColorStyle=C3.New(C3.Color);this._autoFontSize=true;this._autoFontSizeOffset=0;let allowTextSelection=
+false;let styleAttribute="";if(properties){this._tag=properties[TAG]||"div";initialStr=properties[CONTENT_STR];const initialType=properties[CONTENT_TYPE];if(initialType===1)initialStr=C3.New(C3.BBString,initialStr,{convertLineBreaks:true}).toHTML();else if(initialType===2)this._initialType="text";this.GetWorldInfo().SetVisible(properties[INITIALLY_VISIBLE]);this._id=properties[ID];this._className=properties[CLASS_NAME];allowContextMenu=properties[ALLOW_CONTEXT_MENU];stopInputEventsMode=properties[STOP_INPUT_EVENTS];
+setColorStyle=properties[SET_COLOR];defaultColorStyle.setFromJSON(properties[DEFAULT_COLOR]);setBackgroundColorStyle=properties[SET_BACKGROUND_COLOR];defaultBackgroundColorStyle.setFromJSON(properties[DEFAULT_BACKGROUND_COLOR]);this._autoFontSize=properties[AUTO_FONT_SIZE];allowTextSelection=properties[ALLOW_TEXT_SELECTION];styleAttribute=properties[STYLE_ATTRIBUTE]}if(this._initialType==="html")this._htmlContent=initialStr;else this._textContent=initialStr;this.CreateElement({"tag":this._tag,"str":initialStr,
+"type":this._initialType,"id":this._id,"className":this._className,"allow-context-menu":allowContextMenu,"stop-input-events-mode":stopInputEventsMode,"css-color":setColorStyle?defaultColorStyle.getCssRgb():"","css-background-color":setBackgroundColorStyle?defaultBackgroundColorStyle.getCssRgb():"","allow-text-selection":allowTextSelection,"style-attribute":styleAttribute})}Release(){super.Release()}_GetStringContent(str,type){let contentType="html";if(type==="bbcode")str=C3.New(C3.BBString,str,{convertLineBreaks:true}).toHTML();
+else if(type==="text")contentType="text";return{contentType,str}}async _SetContent(str_,type="html",selector="",isAll=false){const {contentType,str}=this._GetStringContent(str_,type);if(!selector)if(contentType==="html"){if(this._initialType==="html"&&this._htmlContent===str)return;this._htmlContent=str}else if(contentType==="text"){if(this._initialType==="text"&&this._textContent===str)return;this._textContent=str}await this._SendHTMLUpdateMessage("set-content",{"str":str,"type":contentType,"selector":selector,
+"is-all":isAll})}async _InsertContent(str_,type="html",atEnd=true,selector="",isAll=false){if(!str_)return;const {contentType,str}=this._GetStringContent(str_,type);await this._SendHTMLUpdateMessage("insert-content",{"str":str,"type":contentType,"at-end":atEnd,"selector":selector,"is-all":isAll})}async _RemoveContent(selector,isClear=false,isAll=false){await this._SendHTMLUpdateMessage("remove-content",{"selector":selector,"is-clear":isClear,"is-all":isAll})}async _SetContentClass(mode,classArr,selector,
+isAll=false){await this._SendHTMLUpdateMessage("set-content-class",{"mode":mode,"class-array":classArr,"selector":selector,"is-all":isAll})}async _SetContentAttribute(mode,attrib,value,selector,isAll=false){await this._SendHTMLUpdateMessage("set-content-attribute",{"mode":mode,"attribute":attrib,"value":value,"selector":selector,"is-all":isAll})}async _SetContentCSSStyle(propName,value,selector,isAll=false){await this._SendHTMLUpdateMessage("set-content-css-style",{"prop":C3.CSSToCamelCase(propName),
+"value":value,"selector":selector,"is-all":isAll})}async _SendHTMLUpdateMessage(name,data){const result=await this.PostToDOMElementAsync(name,data);if(result["isOk"]){this._htmlContent=result["html"];this._textContent=result["text"]}}async _PositionObjectAtElement(instances,selector){const result=await this.PostToDOMElementAsync("get-element-box",{"selector":selector});if(!result["isOk"])return;const canvasManager=this._runtime.GetCanvasManager();const canvasLeft=result["left"]-canvasManager.GetCanvasClientX();
+const canvasTop=result["top"]-canvasManager.GetCanvasClientY();const canvasRight=result["right"]-canvasManager.GetCanvasClientX();const canvasBottom=result["bottom"]-canvasManager.GetCanvasClientY();for(const inst of instances){const wi=inst.GetWorldInfo();if(!wi)continue;const layer=wi.GetLayer();const [layerLeft,layerTop]=layer.CanvasCssToLayer(canvasLeft,canvasTop,wi.GetZElevation());const [layerRight,layerBottom]=layer.CanvasCssToLayer(canvasRight,canvasBottom,wi.GetZElevation());if(!isFinite(layerLeft)||
+!isFinite(layerTop)||!isFinite(layerRight)||!isFinite(layerBottom))continue;const layerWidth=layerRight-layerLeft;const layerHeight=layerBottom-layerTop;const ox=wi.GetOriginX();const oy=wi.GetOriginY();const layerX=layerLeft+ox*layerWidth;const layerY=layerTop+oy*layerHeight;if(wi.GetX()===layerX&&wi.GetY()===layerY&&wi.GetWidth()===layerWidth&&wi.GetHeight()===layerHeight)continue;wi.SetXY(layerX,layerY);wi.SetSize(layerWidth,layerHeight);wi.SetBboxChanged()}}async _CreateSpriteImgElement(inst,
+selector,insertAt,id,clazz){const wi=inst.GetWorldInfo();const imageInfo=inst.GetCurrentImageInfo();if(!wi||!imageInfo)return;const blobUrl=await imageInfo.ExtractImageToBlobURL();const result=await this.PostToDOMElementAsync("insert-img-element",{"blobUrl":blobUrl,"width":imageInfo.GetWidth(),"height":imageInfo.GetHeight(),"selector":selector,"insertAt":insertAt,"id":id,"class":clazz});if(result["isOk"]){this._htmlContent=result["html"];this._textContent=result["text"]}}async _SetElementScrollPosition(selector,
+direction,position){await this.PostToDOMElementAsync("set-scroll-position",{"selector":selector,"direction":direction,"position":position})}GetElementState(){return{"html":this._htmlContent}}_OnInitialContent(e){this._htmlContent=e["html"];this._textContent=e["text"]}_GetHTMLContent(){return this._htmlContent}_GetTextContent(){return this._textContent}async _OnClick(e){const chain=e["chain"];for(const entry of chain){this._targetId=entry["targetId"];this._targetClass=entry["targetClass"];this.DispatchScriptEvent("click",
+true,{"targetId":this._targetId,"targetClass":this._targetClass});if(this._targetId)await this.TriggerAsync(C3.Plugins.HTMLElement.Cnds.OnClickedID);if(this._targetClass)await this.TriggerAsync(C3.Plugins.HTMLElement.Cnds.OnClickedClass)}if(chain.length>0){const entry=chain[0];this._targetId=entry["targetId"];this._targetClass=entry["targetClass"]}else{this._targetId="";this._targetClass=""}await this.TriggerAsync(C3.Plugins.HTMLElement.Cnds.OnClicked);this._targetId="";this._targetClass=""}async _OnAnimationEnd(e){this._targetId=
+e["targetId"];this._targetClass=e["targetClass"];this._cssAnimationName=e["animationName"];this.DispatchScriptEvent("animationend",true,{"targetId":this._targetId,"targetClass":this._targetClass,"animationName":this._cssAnimationName});await this.TriggerAsync(C3.Plugins.HTMLElement.Cnds.OnCSSAnimationEnded);this._targetId="";this._targetClass="";this._cssAnimationName=""}Draw(renderer){}SaveToJson(){return{"t":this._tag,"h":this._htmlContent,"id":this._id,"c":this._className}}LoadFromJson(o){this._tag=
+o["t"];this._htmlContent=o["h"];this._id=o["id"];this._className=o["c"];this.UpdateElementState()}GetPropertyValueByIndex(index){}SetPropertyValueByIndex(index,value){}GetDebuggerProperties(){return[]}GetScriptInterfaceClass(){return self.IHTMLElementInstance}};const map=new WeakMap;const VALID_CONTENT_TYPES=new Set(["html","bbcode","text"]);const VALID_SET_CLASS_MODES=new Set(["add","toggle","remove"]);const VALID_SET_ATTRIBUTE_MODES=new Set(["set","remove"]);const VALID_INSERT_AT=["start","end",
+"replace"];const VALID_SCROLL_DIRECTIONS=new Set(["left","top"]);self.IHTMLElementInstance=class IHTMLElementInstance extends self.IDOMInstance{constructor(){super();map.set(this,self.IInstance._GetInitInst().GetSdkInstance())}setContent(str,type="html",selector="",isAll=false){C3X.RequireString(str);if(!VALID_CONTENT_TYPES.has(type))throw new Error("invalid type");C3X.RequireString(selector);return map.get(this)._SetContent(str,type,selector,!!isAll)}insertContent(str,type="html",atEnd=true,selector=
+"",isAll=false){C3X.RequireString(str);if(!VALID_CONTENT_TYPES.has(type))throw new Error("invalid type");C3X.RequireString(selector);return map.get(this)._InsertContent(str,type,!!atEnd,selector,!!isAll)}setContentClass(mode,classArr,selector,isAll=false){if(!VALID_SET_CLASS_MODES.has(mode))throw new Error("invalid mode");if(typeof classArr==="string")classArr=classArr.split(" ");C3X.RequireArray(classArr);C3X.RequireString(selector);return map.get(this)._SetContentClass(mode,classArr,selector,!!isAll)}setContentAttribute(mode,
+attrib,value,selector,isAll=false){if(!VALID_SET_ATTRIBUTE_MODES.has(mode))throw new Error("invalid type");C3X.RequireString(attrib);value=value.toString();C3X.RequireString(selector);return map.get(this)._SetContentAttribute(mode,attrib,value,selector,!!isAll)}setContentCssStyle(propName,value,selector,isAll){C3X.RequireString(propName);value=value.toString();C3X.RequireString(selector);return map.get(this)._SetContentCSSStyle(propName,value,selector,!!isAll)}positionInstanceAtElement(iinst,selector){C3X.RequireInstanceOf(iinst,
+self.IWorldInstance);C3X.RequireString(selector);const myInst=map.get(this);const runtime=myInst.GetRuntime();const otherInst=runtime._UnwrapIWorldInstance(iinst);return map.get(this)._PositionObjectAtElement([otherInst],selector)}createSpriteImgElement(iSpriteInst,selector,insertAt_,id,class_){C3X.RequireInstanceOf(iSpriteInst,self.ISpriteInstance);C3X.RequireString(selector);C3X.RequireOptionalString(id);C3X.RequireOptionalString(class_);const insertAt=VALID_INSERT_AT.indexOf(insertAt_);if(insertAt<
+0)throw new Error("invalid insert position");const myInst=map.get(this);const runtime=myInst.GetRuntime();const otherInst=runtime._UnwrapIWorldInstance(iSpriteInst);return map.get(this)._CreateSpriteImgElement(otherInst,selector,insertAt,id,class_)}setScrollPosition(selector,direction,position){C3X.RequireString("selector");if(!VALID_SCROLL_DIRECTIONS.has(direction))throw new Error("invalid direction");C3X.RequireNumber(position);return map.get(this)._SetElementScrollPosition(selector,direction,position)}get htmlContent(){return map.get(this)._GetHTMLContent()}set htmlContent(str){map.get(this)._SetContent(str,
+"html","",false)}get textContent(){return map.get(this)._GetTextContent()}set textContent(str){map.get(this)._SetContent(str,"text","",false)}}}
+{const C3=self.C3;C3.Plugins.HTMLElement.Cnds={OnClicked(){return true},OnClickedID(id){return C3.equalsNoCase(this._targetId,id)},OnClickedClass(className){const targetClasses=this._targetClass.toLowerCase().split(" ");const testClasses=className.toLowerCase().split(" ");return testClasses.every(c=>targetClasses.includes(c))},OnCSSAnimationEnded(animationName){return C3.equalsNoCase(this._cssAnimationName,animationName)}}}
+{const C3=self.C3;const CONTENT_TYPES=["html","bbcode","text"];const SET_CLASS_MODES=["add","toggle","remove"];const SET_ATTRIBUTE_MODES=["set","remove"];C3.Plugins.HTMLElement.Acts={SetContent(contentType,str,selector,type){return this._SetContent(str,CONTENT_TYPES[contentType],selector,type!==0)},InsertContent(contentType,str,position,selector,type){return this._InsertContent(str,CONTENT_TYPES[contentType],position!==0,selector,type!==0)},RemoveContent(mode,selector,type){return this._RemoveContent(selector,
+mode!==0,type!==0)},SetContentClass(mode,className,selector,type){return this._SetContentClass(SET_CLASS_MODES[mode],className.split(" "),selector,type!==0)},SetContentAttribute(mode,attrib,value,selector,type){return this._SetContentAttribute(SET_ATTRIBUTE_MODES[mode],attrib,value.toString(),selector,type!==0)},SetContentCSSStyle(propName,value,selector,type){return this._SetContentCSSStyle(propName,value,selector,type!==0)},PositionObjectAtElement(objectClass,selector){if(!objectClass)return;return this._PositionObjectAtElement(objectClass.GetCurrentSol().GetInstances(),
+selector)},CreateSpriteImgElement(objectClass,selector,insertAt,id,clazz){if(!objectClass)return;const inst=objectClass.GetFirstPicked();if(!inst)return;return this._CreateSpriteImgElement(inst,selector,insertAt,id,clazz)},SetScrollPosition(selector,direction,position){return this._SetElementScrollPosition(selector,["left","top"][direction],position)}}}
+{const C3=self.C3;C3.Plugins.HTMLElement.Exps={HTMLContent(){return this._htmlContent},TextContent(){return this._textContent},TargetID(){return this._targetId},TargetClass(){return this._targetClass},EscapeHTML(str){return C3.EscapeHTML(str.toString())}}};
+
+}
+
+{
 'use strict';{const C3=self.C3;const actionPromises=[];C3.Plugins.Audio=class AudioPlugin extends C3.SDKPluginBase{constructor(opts){super(opts)}_AddActionPromise(promise){actionPromises.push(promise)}static async WaitForAllActionPromises(){await Promise.all(actionPromises);C3.clearArray(actionPromises)}Release(){super.Release()}}}
 {const C3=self.C3;const C3X=self.C3X;C3.Plugins.Audio.Type=class AudioType extends C3.SDKTypeBase{constructor(objectClass){super(objectClass)}Release(){super.Release()}OnCreate(){}GetScriptInterfaceClass(){return self.IAudioObjectType}};function GetAudioDOMInterface(){if(self["C3Audio_DOMInterface"])return self["C3Audio_DOMInterface"];else throw new Error("audio scripting API cannot be used here - make sure the project is using DOM mode, not worker mode");}self.IAudioObjectType=class IAudioObjectType extends self.IObjectClass{constructor(objectType){super(objectType)}get audioContext(){return GetAudioDOMInterface()["GetAudioContextExtern"]()}get destinationNode(){return GetAudioDOMInterface()["GetDestinationNodeExtern"]()}}}
 {const C3=self.C3;const DOM_COMPONENT_ID="audio";const LATENCY_HINTS=["interactive","balanced","playback"];C3.Plugins.Audio.Instance=class AudioInstance extends C3.SDKInstanceBase{constructor(inst,properties){super(inst,DOM_COMPONENT_ID);this._nextPlayTime=0;this._triggerTags=[];this._enableMultiTags=true;this._timeScaleMode=0;this._saveLoadMode=0;this._playInBackground=false;this._panningModel=1;this._distanceModel=1;this._listenerPos=[this._runtime.GetViewportWidth()/2,this._runtime.GetViewportHeight()/
@@ -6347,6 +6380,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Spritefont2,
 		C3.Behaviors.DragnDrop,
 		C3.Plugins.TiledBg,
+		C3.Plugins.HTMLElement,
 		C3.Behaviors.Pin,
 		C3.Plugins.Audio,
 		C3.Plugins.Keyboard,
@@ -6374,7 +6408,9 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Acts.Wait,
 		C3.Plugins.System.Acts.AddVar,
 		C3.Plugins.System.Acts.SetVar,
+		C3.ScriptsInEvents.Gamecode_Event6_Act1,
 		C3.Plugins.Touch.Cnds.OnTouchObject,
+		C3.ScriptsInEvents.Gamecode_Event7_Act1,
 		C3.Plugins.System.Cnds.LayerVisible,
 		C3.Plugins.System.Cnds.Compare,
 		C3.Plugins.Sprite.Acts.Spawn,
@@ -6407,7 +6443,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Cnds.TriggerOnce,
 		C3.Plugins.System.Acts.SetBoolVar,
 		C3.Plugins.Audio.Acts.FadeVolume,
-		C3.ScriptsInEvents.Gamecode_Event91_Act2,
+		C3.ScriptsInEvents.Gamecode_Event94_Act2,
 		C3.Plugins.AJAX.Cnds.OnComplete,
 		C3.Behaviors.Flash.Acts.Flash,
 		C3.Plugins.System.Acts.ToggleBoolVar,
@@ -6421,7 +6457,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Sprite.Acts.SetScale,
 		C3.Behaviors.Tween.Exps.Value,
 		C3.Plugins.Browser.Acts.GoToURL,
-		C3.ScriptsInEvents.Gamecode_Event160_Act1,
+		C3.ScriptsInEvents.Gamecode_Event163_Act1,
 		C3.Plugins.System.Exps.int,
 		C3.Plugins.Browser.Exps.QueryParam,
 		C3.Plugins.Json.Acts.Parse,
@@ -6502,6 +6538,7 @@ self.C3_JsPropNameTable = [
 	{ProgressLevel: 0},
 	{MainText: 0},
 	{bg_grey: 0},
+	{ConnectWallet_button: 0},
 	{ButtonHomeGame: 0},
 	{ButtonSave: 0},
 	{ButtonSoundModify: 0},
@@ -6700,6 +6737,7 @@ self.InstanceType = {
 	ProgressLevel: class extends self.ISpriteInstance {},
 	MainText: class extends self.ITextInstance {},
 	bg_grey: class extends self.ISpriteInstance {},
+	ConnectWallet_button: class extends self.IHTMLElementInstance {},
 	ButtonHomeGame: class extends self.ISpriteInstance {},
 	ButtonSave: class extends self.ISpriteInstance {},
 	ButtonSoundModify: class extends self.ISpriteInstance {},
@@ -6918,6 +6956,7 @@ self.C3_ExpressionFuncs = [
 			const v0 = p._GetNode(0).GetVar();
 			return () => and("+", Math.floor(v0.GetValue()));
 		},
+		() => "Connect Wallet",
 		() => "Main Bitcoin Touch",
 		() => 7,
 		() => 6,
