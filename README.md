@@ -84,16 +84,6 @@
   </table>
 </div>
 
-## 📞 Contact
-
-<div align="center" style="margin: 30px 0;">
-  <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
-    <a href="https://t.me/kingbutter1011" style="display: inline-block; text-decoration: none;">
-      <img src="https://img.shields.io/badge/Telegram-Channel-2CA5E0?style=for-the-badge&logo=telegram" alt="Telegram">
-    </a>
-  </div>
-</div>
-
 <hr style="margin: 40px 0; border: 0; height: 1px; background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));">
 
 <div align="center" style="margin-top: 30px;">
